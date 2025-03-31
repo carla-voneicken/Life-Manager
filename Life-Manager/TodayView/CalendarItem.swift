@@ -6,9 +6,8 @@
 //
 
 import Foundation
-import SwiftUI
 
-struct CalendarItem: View {
+struct CalendarItem {
     var id: UUID = UUID()
     var title: String
     var description: String?
@@ -16,40 +15,6 @@ struct CalendarItem: View {
     var location: String?
     var participants: [String]
     
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text(title)
-                    .font(.headline)
-                if description != nil {
-                    Text(description!)
-                        .font(.caption2)
-                }
-                Spacer()
-                if location != nil {
-                    Text(location!)
-                        .font(.caption)
-                }
-            }
-            Spacer()
-            VStack(alignment: .trailing) {
-                Text(time)
-                    .font(.subheadline)
-                HStack {
-                    ForEach(participants, id: \.self) { item in
-                        var firstLetter = item.prefix(1).lowercased()
-                        Image(systemName: "\(firstLetter).circle.fill")
-                            .resizable()
-                            .frame(width: 40, height: 40)
-                            .foregroundColor(.green)
-                    }
-                }
-            }
-        }
-        .padding()
-        .frame(maxWidth: .infinity)
-        .frame(height: 80)
-    }
     
     static var samples: [CalendarItem] {
         [
@@ -84,12 +49,4 @@ struct CalendarItem: View {
     }
 }
 
-#Preview {
-    CalendarItem(
-        title: "Zahnarzt",
-        description: "Prophylaxe",
-        time: "09:00 - 10:00",
-        location: "Praxis Zeit für schöne Zähne",
-        participants: ["Mama", "Sophie"]
-    )
-}
+
