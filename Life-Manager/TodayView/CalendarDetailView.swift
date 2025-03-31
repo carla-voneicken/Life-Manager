@@ -21,18 +21,18 @@ struct CalendarDetailView: View {
                         .font(.subheadline)
                 }
                 
-                Text("Time: \(item.time)")
+                Text("Uhrzeit: \(item.time)")
                     .font(.headline)
                 
                 if let location = item.location {
-                    Text("Location: \(location)")
+                    Text("Ort: \(location)")
                         .font(.subheadline)
                 }
                 
-                Spacer()
+                Text("Teilnehmer: \(item.participants.joined(separator: ", "))")
+                    .font(.subheadline)
             }
             .padding()
-            .navigationTitle("Event Details")
         }
 }
 
