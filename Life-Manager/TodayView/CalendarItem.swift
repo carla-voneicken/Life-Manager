@@ -16,7 +16,7 @@ struct CalendarItem {
     var participants: [String]
     
     
-    static var samples: [CalendarItem] {
+    static var samples: [CalendarItem] =
         [
             CalendarItem(
                 title: "Zahnarzt",
@@ -46,7 +46,6 @@ struct CalendarItem {
                 ]
             )
         ]
-    }
 }
 
 
