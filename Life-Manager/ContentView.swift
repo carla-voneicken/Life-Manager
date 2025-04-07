@@ -9,16 +9,28 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "fireworks")
-                .resizable()
-                .frame(width: 100, height: 100)
-                .foregroundStyle(.tint)
-                .padding()
-            Text("Welcome to Life Manager")
-                .font(.title)
+       TabView {
+           TodayView()
+               .tabItem {
+                   Label("Heute", systemImage: "house.fill")
+               }
+           ToDoview()
+               .tabItem {
+                   Label("Aufgaben", systemImage: "checklist")
+               }
+           CalendarView()
+               .tabItem {
+                   Label("Kalendar", systemImage: "calendar")
+               }
+           FamilyView()
+               .tabItem {
+                   Label("Familie", systemImage: "person.3.fill")
+               }
+           ShoppingListView()
+               .tabItem {
+                   Label("Einkaufen", systemImage: "cart.fill")
+               }
         }
-        .padding()
     }
 }
 
