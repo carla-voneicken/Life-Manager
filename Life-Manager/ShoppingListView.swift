@@ -1,83 +1,126 @@
-//
-//  ShoppingListView.swift
-//  Life-Manager
-//
-//  Created by Christiane Roth on 01.04.25.
-//
 import SwiftUI
-
-
+class Supermarket: Identifiable, ObservableObject {
+    let id = UUID()
+    @Published var name: String
+    @Published var items: [ShoppingItem] = []
+    init(name: String) {
+        self.name = name
+    }
+}
+struct ShoppingItem: Identifiable {
+    let id = UUID()
+    var name: String
+}
 struct ShoppingListView: View {
-    @State private var newItem1 = ""
-    @State private var shoppingList = ["Hähnchen", "Eier", "Milch", "Brot"]
-    @State private var newItem = ""
-    @State private var struckThroughItems = Set<String>()//false
-    
-    
-    @State private var supermarket = ["Edeka", "Aldi", "Lidl"]
-    //let colors: [Color] = [.blue, .green, .yellow, .orange, .red]
-    
+    @State private var supermarkets: [Supermarket] = [
+        Supermarket(name: "Edeka"),
+        Supermarket(name: "Aldi"),
+        Supermarket(name: "Lidl"),
+        Supermarket(name: "Rewe")
+    ]
+    @State private var showingAddSupermarket = false
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-        HStack {
-            ForEach(supermarket, id: \.self) { item in
-                Text(item)
-                    .frame(width: 75, height: 75)
-                    .textFieldStyle(.roundedBorder)
-               
-                }
-
-            }
-            
-          //  TextField("Add Supermarket", text: $newItem1)
-          //      .textFieldStyle(RoundedBorderTextFieldStyle())
-         //   ViewThatFits(in: /*@START_MENU_TOKEN@*/.horizontal/*@END_MENU_TOKEN@*/) {
-        //        /*@START_MENU_TOKEN@*/Text("Content")/*@END_MENU_TOKEN@*/
-         //   }
-        }
         NavigationStack {
             VStack {
-                HStack {
-                    TextField("Neue Liste", text: $newItem)
-                        .textFieldStyle(.roundedBorder)
-                    Button {
-                        if !newItem.isEmpty {
-                            shoppingList.append(newItem)
-                            newItem = ""
-                        }
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                    .disabled(newItem.isEmpty)
-                }
-                
-                .padding()
                 List {
-                    ForEach(shoppingList, id: \.self) { item in
-                        HStack {
-                            Text(item)
-                                .strikethrough(struckThroughItems.contains(item), color: .red)
-                                .onTapGesture {
-                                    if struckThroughItems.contains(item) {
-                                        struckThroughItems.remove(item)
-                                    } else {
-                                        struckThroughItems.insert(item)
-                                    }
-                                }
-                            }
+                    ForEach(supermarkets, id: \.id) { supermarket in
+                        NavigationLink {
+                            SupermarketDetailView(supermarket: supermarket)
+                        } label: {
+                            Text(supermarket.name)
+                        }
                     }
-                    .onDelete {indexSet in
-                        shoppingList.remove(atOffsets: indexSet)
+                    .onDelete(perform: deleteSupermarket)
+                }
+                .listStyle(.plain)
+                Button("Supermarkt hinzufügen") {
+                    showingAddSupermarket = true
+                }
+                .padding()
+            }
+            .navigationTitle("Einkaufsliste")
+            .sheet(isPresented: $showingAddSupermarket) {
+                AddSupermarketView(supermarkets: $supermarkets, isPresented: $showingAddSupermarket)
+            }
+        }
+    }
+    func deleteSupermarket(at offsets: IndexSet) {
+        supermarkets.remove(atOffsets: offsets)
+    }
+}
+struct AddSupermarketView: View {
+    @Binding var supermarkets: [Supermarket]
+    @State private var newSupermarketName = ""
+    @Binding var isPresented: Bool
+    var body: some View {
+        NavigationView {
+            Form {
+                TextField("Supermarkt Name", text: $newSupermarketName)
+                Button("Hinzufügen") {
+                    if !newSupermarketName.isEmpty {
+                        supermarkets.append(Supermarket(name: newSupermarketName))
+                        isPresented = false
                     }
-                    .listStyle(.plain)
-                    .navigationTitle("Einkaufsliste")
+                }
+                .disabled(newSupermarketName.isEmpty)
+            }
+            .navigationTitle("Neuer Supermarkt")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Abbrechen") {
+                        isPresented = false
+                    }
                 }
             }
         }
     }
 }
-    #Preview {
-            ShoppingListView()
+struct SupermarketDetailView: View {
+    @ObservedObject var supermarket: Supermarket
+    @State  var newItemName = ""
+    @State  var struckThroughItems2 = Set<UUID>()
+    var body: some View {
+        VStack {
+            Text("Artikel für \(supermarket.name)")
+                .font(.title)
+                .padding()
+            HStack {
+                TextField("Neues Item", text: $newItemName)
+                    .textFieldStyle(.roundedBorder)
+                Button {
+                    if !newItemName.isEmpty {
+                        supermarket.items.append(ShoppingItem(name: newItemName))
+                        newItemName = ""
+                    }
+                } label: {
+                    Image(systemName: "plus")
+                }
+                .disabled(newItemName.isEmpty)
+            }
+            .padding()
+            List {
+                ForEach(supermarket.items, id: \.id) { item in
+                    HStack {
+                        Text(item.name)
+                            .strikethrough(struckThroughItems2.contains(item.id), color: .red)
+                            .onTapGesture {
+                                if struckThroughItems2.contains(item.id) {
+                                    struckThroughItems2.remove(item.id)
+                                } else {
+                                    struckThroughItems2.insert(item.id)
+                                }
+                            }
+                    }
+                }
+                .onDelete { indexSet in
+                    supermarket.items.remove(atOffsets: indexSet)
+                }
+            }
+            .listStyle(.plain)
+        }
+        .navigationTitle(supermarket.name)
+    }
 }
-
-
+#Preview {
+    ShoppingListView()
+}
