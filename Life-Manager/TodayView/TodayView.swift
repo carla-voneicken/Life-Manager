@@ -10,6 +10,7 @@ import SwiftUI
 struct TodayView: View {
     
     @State private var calendarItemsToday = CalendarItem.samples
+    @State private var taskItemsToday = TaskItem.samples
     
     let date: Date = Date()
     var formattedDate: String {
@@ -34,6 +35,17 @@ struct TodayView: View {
                     }
                 }
                 
+                Text("Aufgaben")
+                    .font(.title)
+                    .padding(.horizontal)
+                    .padding(.top)
+                
+                List($taskItemsToday, id: \.id) { $item in
+                    NavigationLink(destination: TaskDetailView(item: item)) {
+                        TaskItemView(item: $item)
+                    }
+                }
+                
             }
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Heute, \(formattedDate)")
@@ -53,7 +65,7 @@ struct TodayView: View {
                 } label: {
                     Image("profilepicture")
                         .resizable()
-                        .frame(width: 50, height: 50)
+                        .frame(width: 40, height: 40)
                         .tint(.green)
                         .clipShape(Circle())
                 }
