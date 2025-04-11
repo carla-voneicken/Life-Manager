@@ -21,10 +21,12 @@ struct TaskItemView: View {
                 Text(item.title)
                     .font(.headline)
                     .foregroundColor(item.isCompleted ? .gray : .black)
+                    .strikethrough(item.isCompleted ? true : false)
                 if item.description != nil {
                     Text(item.description!)
                         .font(.caption2)
                         .foregroundColor(item.isCompleted ? .gray : .black)
+                        .strikethrough(item.isCompleted ? true : false)
                 }
             }
             Spacer()

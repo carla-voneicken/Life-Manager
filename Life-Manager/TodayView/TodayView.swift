@@ -54,14 +54,14 @@ struct TodayView: View {
                 Button {
                     print("About tapped!")
                 } label: {
-                    Image(systemName: "line.3.horizontal")
+                    Image(systemName: "plus")
                         .resizable()
                         .frame(width: 30, height: 25)
                         .tint(.black)
                 }
                 
                 Button {
-                    print("Help tapped!")
+                    ProfileView()
                 } label: {
                     Image("profilepicture")
                         .resizable()
