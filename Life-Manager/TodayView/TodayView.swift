@@ -12,6 +12,9 @@ struct TodayView: View {
     @State private var calendarItemsToday = CalendarItem.samples
     @State private var taskItemsToday = TaskItem.samples
     
+    @State private var selectedCalendarItem: CalendarItem? = nil
+    @State private var selectedTaskItem: TaskItem? = nil
+    
     let date: Date = Date()
     var formattedDate: String {
         let formatter = DateFormatter()
@@ -22,30 +25,52 @@ struct TodayView: View {
     
     var body: some View {
         NavigationStack {
-            VStack(alignment: .leading, spacing: 8) {
-                
-                Text("Termine")
-                    .font(.title)
-                    .padding(.horizontal)
-                    .padding(.top)
-                
-                List(calendarItemsToday, id: \.id) { item in
-                    NavigationLink(destination: CalendarDetailView(item: item)) {
-                        CalendarItemView(item: item)
+            ScrollView {
+                VStack(alignment: .leading, spacing: 8) {
+                    
+                    Text("Termine")
+                        .font(.title)
+                        .padding(.horizontal)
+                        .padding(.top)
+                    
+                    LazyVStack(spacing: 0) {
+                        ForEach(calendarItemsToday, id: \.id) { item in
+                            CalendarItemView(item: item)
+                                .padding()
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(Color(.systemBackground))
+                                        .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0 , y: 2)
+                                    )
+                                .padding(.vertical, 4)
+                                .onTapGesture {
+                                    selectedCalendarItem = item
+                                }
+                        }
                     }
-                }
-                
-                Text("Aufgaben")
-                    .font(.title)
                     .padding(.horizontal)
-                    .padding(.top)
-                
-                List($taskItemsToday, id: \.id) { $item in
-                    NavigationLink(destination: TaskDetailView(item: item)) {
-                        TaskItemView(item: $item)
+                    
+                    Text("Aufgaben")
+                        .font(.title)
+                        .padding(.horizontal)
+                        .padding(.top)
+                    
+                    LazyVStack {
+                        ForEach($taskItemsToday, id: \.id) { $item in
+                            TaskItemView(item: $item)
+                                .padding()
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(Color(.systemBackground))
+                                        .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0 , y: 2)
+                                    )
+                                .onTapGesture {
+                                    selectedTaskItem = item
+                                }
+                        }
                     }
+                    .padding(.horizontal)
                 }
-                
             }
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Heute, \(formattedDate)")
@@ -69,6 +94,14 @@ struct TodayView: View {
                         .tint(.green)
                         .clipShape(Circle())
                 }
+            }
+            .sheet(item: $selectedCalendarItem) { item in
+                CalendarDetailView(item: item)
+                    .presentationDetents([.medium, .large])
+            }
+            .sheet(item: $selectedTaskItem) { item in
+                TaskDetailView(item: item)
+                    .presentationDetents([.medium, .large])
             }
         }
     }

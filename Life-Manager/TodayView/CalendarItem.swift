@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CalendarItem {
+struct CalendarItem: Identifiable {
     var id: UUID = UUID()
     var title: String
     var description: String?
