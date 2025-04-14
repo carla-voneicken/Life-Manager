@@ -85,9 +85,7 @@ struct TodayView: View {
                         .tint(.black)
                 }
                 
-                Button {
-                    ProfileView()
-                } label: {
+                NavigationLink(destination: ProfileView()) {
                     Image("profilepicture")
                         .resizable()
                         .frame(width: 40, height: 40)
