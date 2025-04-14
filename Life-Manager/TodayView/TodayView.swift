@@ -28,10 +28,21 @@ struct TodayView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 8) {
                     
-                    Text("Termine")
-                        .font(.title)
-                        .padding(.horizontal)
-                        .padding(.top)
+                    HStack {
+                        Text("Termine")
+                            .font(.title)
+                            .padding(.horizontal)
+                            .padding(.top)
+                        Spacer()
+                        Button {
+                            
+                        } label: {
+                            Image(systemName: "plus.circle")
+                                .padding(.horizontal)
+                                .foregroundColor(.black)
+                                .font(.title)
+                        }
+                    }
                     
                     LazyVStack(spacing: 0) {
                         ForEach(calendarItemsToday, id: \.id) { item in
@@ -50,10 +61,21 @@ struct TodayView: View {
                     }
                     .padding(.horizontal)
                     
-                    Text("Aufgaben")
-                        .font(.title)
-                        .padding(.horizontal)
-                        .padding(.top)
+                    HStack {
+                        Text("Aufgaben")
+                            .font(.title)
+                            .padding(.horizontal)
+                            .padding(.top)
+                        Spacer()
+                        Button {
+                            
+                        } label: {
+                            Image(systemName: "plus.circle")
+                                .padding(.horizontal)
+                                .foregroundColor(.black)
+                                .font(.title)
+                        }
+                    }
                     
                     LazyVStack {
                         ForEach($taskItemsToday, id: \.id) { $item in
@@ -76,14 +98,14 @@ struct TodayView: View {
             .navigationTitle("Heute, \(formattedDate)")
             .toolbar {
                 
-                Button {
-                    print("About tapped!")
-                } label: {
-                    Image(systemName: "plus")
-                        .resizable()
-                        .frame(width: 30, height: 25)
-                        .tint(.black)
-                }
+//                Button {
+//                    print("About tapped!")
+//                } label: {
+//                    Image(systemName: "plus")
+//                        .resizable()
+//                        .frame(width: 30, height: 25)
+//                        .tint(.black)
+//                }
                 
                 NavigationLink(destination: ProfileView()) {
                     Image("profilepicture")
