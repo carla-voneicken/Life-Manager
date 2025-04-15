@@ -117,11 +117,18 @@ struct TodayView: View {
             }
             .sheet(item: $selectedCalendarItem) { item in
                 CalendarDetailView(item: item)
-                    .presentationDetents([.medium, .large])
+                    .presentationDetents([.fraction(0.3)])
             }
-            .sheet(item: $selectedTaskItem) { item in
-                TaskDetailView(item: item)
-                    .presentationDetents([.medium, .large])
+            
+            .sheet(isPresented: Binding<Bool>(
+                get: { selectedTaskItem != nil },
+                set: { if !$0 { selectedTaskItem = nil } }
+            )) {
+                if let selected = selectedTaskItem,
+                   let index = taskItemsToday.firstIndex(where: { $0.id == selected.id }) {
+                    TaskDetailView(item: $taskItemsToday[index])
+                        .presentationDetents([.fraction(0.25)])
+                }
             }
         }
     }
