@@ -115,9 +115,19 @@ struct TodayView: View {
                         .clipShape(Circle())
                 }
             }
-            .sheet(item: $selectedCalendarItem) { item in
-                CalendarDetailView(item: item)
-                    .presentationDetents([.fraction(0.3)])
+//            .sheet(item: $selectedCalendarItem) { item in
+//                CalendarDetailView(item: item)
+//                    .presentationDetents([.fraction(0.3)])
+//            }
+            .sheet(isPresented: Binding<Bool>(
+                get: { selectedCalendarItem != nil },
+                set: { if !$0 { selectedCalendarItem = nil } }
+            )) {
+                if let selected = selectedCalendarItem,
+                   let index = calendarItemsToday.firstIndex(where: { $0.id == selected.id }) {
+                    CalendarDetailView(item: $calendarItemsToday[index])
+                        .presentationDetents([.fraction(0.4)])
+                }
             }
             
             .sheet(isPresented: Binding<Bool>(

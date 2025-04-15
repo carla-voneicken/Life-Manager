@@ -8,42 +8,87 @@
 import SwiftUI
 
 struct CalendarDetailView: View {
-    var item: CalendarItem
+    @Binding var item: CalendarItem
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(item.title)
+        VStack(alignment: .leading, spacing: 16) {
+            
+            TextField("Titel", text: $item.title)
                 .font(.largeTitle)
                 .bold()
+                .textFieldStyle(RoundedBorderTextFieldStyle())
             
-            if let description = item.description {
-                Text(description)
-                    .font(.subheadline)
-            }
-            
-            Text("Uhrzeit: \(item.time)")
-                .font(.headline)
-            
-            if let location = item.location {
-                Text("Ort: \(location)")
-                    .font(.subheadline)
-            }
-            
-            Text("Teilnehmer: \(item.participants.joined(separator: ", "))")
+            TextField("Uhrzeit", text: $item.time)
                 .font(.subheadline)
+                .bold()
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+
+            TextEditor(text: Binding(
+                get: { item.description ?? "" },
+                set: { item.description = $0.isEmpty ? nil : $0 }
+            ))
+            .frame(height: 30)
+            .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.3)))
+            .font(.subheadline)
+            
+            TextEditor(text: Binding(
+                get: { item.location ?? "" },
+                set: { item.location = $0.isEmpty ? nil : $0 }
+            ))
+            .frame(height: 60)
+            .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.3)))
+            .font(.subheadline)
+            
+            
+            
+//            Text(item.title)
+//                .font(.largeTitle)
+//                .bold()
+//            
+//            if let description = item.description {
+//                Text(description)
+//                    .font(.subheadline)
+//            }
+//            
+//            Text("Uhrzeit: \(item.time)")
+//                .font(.headline)
+//            
+//            if let location = item.location {
+//                Text("Ort: \(location)")
+//                    .font(.subheadline)
+//            }
+//            
+//            Text("Teilnehmer: \(item.participants.joined(separator: ", "))")
+//                .font(.subheadline)
         }
         .padding()
     }
 }
 
 #Preview {
-    CalendarDetailView(item:
-                        CalendarItem(
-                            title: "Zahnarzt",
-                            description: "Prophylaxe",
-                            time: "09:00 - 10:00",
-                            location: "Praxis Zeit für schöne Zähne",
-                            participants: ["Mama", "Sophie"]
-                        )
-    )
+    StatefulPreviewWrapper(
+        CalendarItem(
+            title: "Zahnarzt",
+            description: "Prophylaxe",
+            time: "09:00 - 10:00",
+            location: "Praxis Zeit für schöne Zähne",
+            participants: [
+                "Mama",
+                "Sophie"
+            ]
+        )
+    ) { item in
+        CalendarDetailView(
+            item: item
+        )}
+    
+//    CalendarDetailView(item:
+//                        CalendarItem(
+//                            title: "Zahnarzt",
+//                            description: "Prophylaxe",
+//                            time: "09:00 - 10:00",
+//                            location: "Praxis Zeit für schöne Zähne",
+//                            participants: ["Mama", "Sophie"]
+//                        )
+//    )
 }
