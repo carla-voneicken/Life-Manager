@@ -27,23 +27,13 @@ struct TodayView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 8) {
+                    // Title "Termine"
+                    Text("Termine")
+                        .font(.title)
+                        .padding(.horizontal)
+                        .padding(.top)
                     
-                    HStack {
-                        Text("Termine")
-                            .font(.title)
-                            .padding(.horizontal)
-                            .padding(.top)
-                        Spacer()
-                        Button {
-                            
-                        } label: {
-                            Image(systemName: "plus.circle")
-                                .padding(.horizontal)
-                                .foregroundColor(.black)
-                                .font(.title)
-                        }
-                    }
-                    
+                    // MARK: Calendar entries
                     LazyVStack(spacing: 0) {
                         ForEach(calendarItemsToday, id: \.id) { item in
                             CalendarItemView(item: item)
@@ -61,6 +51,7 @@ struct TodayView: View {
                     }
                     .padding(.horizontal)
                     
+                    // Title "Aufgaben" and Add-Button
                     HStack {
                         Text("Aufgaben")
                             .font(.title)
@@ -68,7 +59,7 @@ struct TodayView: View {
                             .padding(.top)
                         Spacer()
                         Button {
-                            
+                            // TODO: Add a task
                         } label: {
                             Image(systemName: "plus.circle")
                                 .padding(.horizontal)
@@ -77,6 +68,7 @@ struct TodayView: View {
                         }
                     }
                     
+                    // MARK: Tasks
                     LazyVStack {
                         ForEach($taskItemsToday, id: \.id) { $item in
                             TaskItemView(item: $item)
@@ -97,16 +89,7 @@ struct TodayView: View {
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Heute, \(formattedDate)")
             .toolbar {
-                
-//                Button {
-//                    print("About tapped!")
-//                } label: {
-//                    Image(systemName: "plus")
-//                        .resizable()
-//                        .frame(width: 30, height: 25)
-//                        .tint(.black)
-//                }
-                
+                // Link to profile/settings
                 NavigationLink(destination: ProfileView()) {
                     Image("profilepicture")
                         .resizable()
@@ -115,21 +98,23 @@ struct TodayView: View {
                         .clipShape(Circle())
                 }
             }
-//            .sheet(item: $selectedCalendarItem) { item in
-//                CalendarDetailView(item: item)
-//                    .presentationDetents([.fraction(0.3)])
-//            }
+            // MARK: Modal sheet for calendar items
             .sheet(isPresented: Binding<Bool>(
+                // Handle the sheet logic to display the sheet when the selected item is not nil (get:) and set it to nil once the sheet is dismissed (set:)
                 get: { selectedCalendarItem != nil },
+                // $0 is the Boolean value that SwiftUI provides when the sheet is being presented (true) or dismissed (false)
                 set: { if !$0 { selectedCalendarItem = nil } }
             )) {
+                // Only if the selectedCalendarItem exists and the index for that item in the calendarItemsToday array exists, run the code to open the sheet
                 if let selected = selectedCalendarItem,
                    let index = calendarItemsToday.firstIndex(where: { $0.id == selected.id }) {
+                    // CalendarDetailView takes a binding to a certain item (specified by the index) to make it editable
                     CalendarDetailView(item: $calendarItemsToday[index])
+                        // Make the sheet oben to 40% of the screen
                         .presentationDetents([.fraction(0.4)])
                 }
             }
-            
+            // MARK: Modal sheet for task items
             .sheet(isPresented: Binding<Bool>(
                 get: { selectedTaskItem != nil },
                 set: { if !$0 { selectedTaskItem = nil } }
