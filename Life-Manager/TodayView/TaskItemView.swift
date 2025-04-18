@@ -12,16 +12,19 @@ struct TaskItemView: View {
     
     var body: some View {
         HStack {
+            // Image of square (can be "checked")
             Image(systemName: item.isCompleted ? "checkmark.square.fill" : "square")
                 .onTapGesture {
                     item.isCompleted.toggle()
                 }
                 .padding(.trailing)
             VStack (alignment: .leading){
+                // Title
                 Text(item.title)
                     .font(.headline)
                     .foregroundColor(item.isCompleted ? .gray : .black)
                     .strikethrough(item.isCompleted ? true : false)
+                // Description
                 if item.description != nil {
                     Text(item.description!)
                         .font(.caption2)

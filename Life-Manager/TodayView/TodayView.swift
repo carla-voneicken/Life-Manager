@@ -8,20 +8,21 @@
 import SwiftUI
 
 struct TodayView: View {
-    
+    // Arrays of calendar and task items
     @State private var calendarItemsToday = CalendarItem.samples
     @State private var taskItemsToday = TaskItem.samples
     
+    // Selected calendar/task item (needed for displaying the modal sheet)
     @State private var selectedCalendarItem: CalendarItem? = nil
     @State private var selectedTaskItem: TaskItem? = nil
     
+    // Date and Formatter for displaying the current date
     let date: Date = Date()
     var formattedDate: String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         return formatter.string(from: date)
     }
-    
     
     var body: some View {
         NavigationStack {
