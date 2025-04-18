@@ -21,15 +21,15 @@ struct FamilyMember: Identifiable {
                 admin: true
             ), FamilyMember(
                 name: "Papa",
-                color: .red,
+                color: .blue,
                 admin: true
             ), FamilyMember(
                 name: "Sophie",
-                color: .red,
+                color: .yellow,
                 admin: true
             ), FamilyMember(
                 name: "Ben",
-                color: .red,
+                color: .green,
                 admin: true
             )
         ]
