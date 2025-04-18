@@ -1,4 +1,5 @@
 import SwiftUI
+
 struct ToDo: Identifiable {
     let id = UUID()
     var name: String
@@ -18,6 +19,8 @@ class Mission: Identifiable, ObservableObject, Equatable { // Wichtig um zu erke
     }
 }
 struct ToDoView: View {
+   
+    @Environment(\.appColors) var appColors
     @State private var newMissionTitle: String = ""
     @State private var missions: [Mission] = [
         Mission(name: "Haushalt"),
