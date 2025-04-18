@@ -29,13 +29,13 @@ struct CalendarItemView: View {
             VStack(alignment: .trailing) {
                 Text(item.time)
                     .font(.subheadline)
-                HStack {
+                HStack(spacing: -10) {
                     ForEach(item.participants) { item in
                         let firstLetter = item.name.prefix(1).lowercased()
                         Image(systemName: "\(firstLetter).circle.fill")
                             .resizable()
                             .frame(width: 40, height: 40)
-                            .foregroundColor(.green)
+                            .foregroundColor(item.color)
                     }
                 }
             }
