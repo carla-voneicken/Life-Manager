@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct Life_ManagerApp: App {
+    
+    let appColors = AppColors()
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .setAppColors(colors: appColors)
         }
     }
 }
+
