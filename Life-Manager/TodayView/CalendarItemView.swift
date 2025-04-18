@@ -54,10 +54,7 @@ struct CalendarItemView: View {
                 description: "Prophylaxe",
                 time: "09:00 - 10:00",
                 location: "Praxis Zeit für schöne Zähne",
-                participants: [
-                    "Mama",
-                    "Sophie"
-                ]
+                participants: ["Mama","Sophie"]
             )
     )
 }
