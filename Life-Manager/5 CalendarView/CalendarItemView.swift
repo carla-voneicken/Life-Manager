@@ -30,8 +30,8 @@ struct CalendarItemView: View {
                 Text(item.time)
                     .font(.subheadline)
                 HStack {
-                    ForEach(item.participants, id: \.self) { item in
-                        let firstLetter = item.prefix(1).lowercased()
+                    ForEach(item.participants) { item in
+                        let firstLetter = item.name.prefix(1).lowercased()
                         Image(systemName: "\(firstLetter).circle.fill")
                             .resizable()
                             .frame(width: 40, height: 40)
@@ -54,10 +54,7 @@ struct CalendarItemView: View {
                 description: "Prophylaxe",
                 time: "09:00 - 10:00",
                 location: "Praxis Zeit für schöne Zähne",
-                participants: [
-                    "Mama",
-                    "Sophie"
-                ]
+                participants: [FamilyMember.familyMembers[0], FamilyMember.familyMembers[2]]
             )
     )
 }
