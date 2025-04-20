@@ -7,7 +7,7 @@
 import SwiftUI
 
 enum TabViewEnum: Identifiable, CaseIterable, View {
-    case todayView, calendarView, familyView, shoppingListView, toDoView
+    case todayView, calendarView, familyView, shoppingListView, taskView
     var id: Self { self }
     
     var tabItem: TabItem {
@@ -20,8 +20,8 @@ enum TabViewEnum: Identifiable, CaseIterable, View {
                 .init(name: "Family", systemImage: "person.crop.circle")
         case .shoppingListView:
                 .init(name: "Shopping", systemImage: "cart")
-        case .toDoView:
-                .init(name: "Todo", systemImage: "list.bullet")
+        case .taskView:
+                .init(name: "Task", systemImage: "list.bullet")
         }
     }
     
@@ -36,8 +36,8 @@ enum TabViewEnum: Identifiable, CaseIterable, View {
         case .shoppingListView:
             ShoppingListView()
       
-        case .toDoView:
-            ToDoView()
+        case .taskView:
+            TaskView()
         }
     }
 }

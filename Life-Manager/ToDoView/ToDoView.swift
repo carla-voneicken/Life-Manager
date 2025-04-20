@@ -1,12 +1,12 @@
 import SwiftUI
-struct ToDo: Identifiable {
+struct Task: Identifiable {
     let id = UUID()
     var name: String
 }
 class Mission: Identifiable, ObservableObject, Equatable { // Wichtig um zu erkennen wo welcher String hingeschrieben wird. Ob lhs und rhs gleich sind oder nicht
     let id = UUID()
     @Published var name: String
-    @Published var items: [ToDo] = []
+    @Published var items: [Task] = []
     
     init(name: String) {
         self.name = name
@@ -17,7 +17,7 @@ class Mission: Identifiable, ObservableObject, Equatable { // Wichtig um zu erke
         return lhs.id == rhs.id
     }
 }
-struct ToDoView: View {
+struct TaskView: View {
     @State private var newMissionTitle: String = ""
     @State private var missions: [Mission] = [
         Mission(name: "Haushalt"),
@@ -93,8 +93,8 @@ struct ToDoView: View {
 }
 struct MissionDetailView: View {
     @ObservedObject var mission: Mission
-    @State private var newToDoName = ""
-    @State private var struckThroughToDo2 = Set<UUID>()
+    @State private var newTaskName = ""
+    @State private var struckThroughTask2 = Set<UUID>()
     
     var body: some View {
         VStack {
@@ -102,29 +102,29 @@ struct MissionDetailView: View {
                 .font(.title)
                 .padding()
             HStack {
-                TextField("Neues ToDo", text: $newToDoName)
+                TextField("New Task", text: $newTaskName)
                     .textFieldStyle(.roundedBorder)
                 Button {
-                    if !newToDoName.isEmpty {
-                        mission.items.append(ToDo(name: newToDoName))
-                        newToDoName = ""
+                    if !newTaskName.isEmpty {
+                        mission.items.append(Task(name: newTaskName))
+                        newTaskName = ""
                     }
                 } label: {
                     Image(systemName: "plus")
                 }
-                .disabled(newToDoName.isEmpty)
+                .disabled(newTaskName.isEmpty)
             }
             .padding()
             List {
                 ForEach(mission.items) { item in
                     HStack {
                         Text(item.name)
-                            .strikethrough(struckThroughToDo2.contains(item.id), color: .red)
+                            .strikethrough(struckThroughTask2.contains(item.id), color: .red)
                             .onTapGesture {
-                                if struckThroughToDo2.contains(item.id) {
-                                    struckThroughToDo2.remove(item.id)
+                                if struckThroughTask2.contains(item.id) {
+                                    struckThroughTask2.remove(item.id)
                                 } else {
-                                    struckThroughToDo2.insert(item.id)
+                                    struckThroughTask2.insert(item.id)
                                 }
                             }
                     }
@@ -137,5 +137,5 @@ struct MissionDetailView: View {
     }
 }
 #Preview {
-    ToDoView()
+    TaskView()
 }
