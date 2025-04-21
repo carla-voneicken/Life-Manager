@@ -6,23 +6,26 @@
 //
 
 import SwiftUI
+import Foundation
 
 struct TodayView: View {
+    // Date and Formatter for displaying the current date
+    let date: Date = Date()
+    let calendar = Calendar.current
+    var formattedDate: String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        return formatter.string(from: date)
+    }
+    
     // Arrays of calendar and task items
-    @State private var calendarItemsToday = CalendarItem.samples
+    @State private var calendarItems = CalendarItem.samples
     @State private var taskItemsToday = TaskItem.samples
     
     // Selected calendar/task item (needed for displaying the modal sheet)
     @State private var selectedCalendarItem: CalendarItem? = nil
     @State private var selectedTaskItem: TaskItem? = nil
     
-    // Date and Formatter for displaying the current date
-    let date: Date = Date()
-    var formattedDate: String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        return formatter.string(from: date)
-    }
     
     var body: some View {
         NavigationStack {
@@ -36,7 +39,7 @@ struct TodayView: View {
                     
                     // MARK: Calendar entries
                     LazyVStack(spacing: 0) {
-                        ForEach(calendarItemsToday, id: \.id) { item in
+                        ForEach(calendarItems.filter { Calendar.current.isDate($0.startDate, inSameDayAs: Date()) }, id: \.id) { item in
                             CalendarItemView(item: item)
                                 .padding()
                                 .background(
@@ -108,9 +111,9 @@ struct TodayView: View {
             )) {
                 // Only if the selectedCalendarItem exists and the index for that item in the calendarItemsToday array exists, run the code to open the sheet
                 if let selected = selectedCalendarItem,
-                   let index = calendarItemsToday.firstIndex(where: { $0.id == selected.id }) {
+                   let index = calendarItems.firstIndex(where: { $0.id == selected.id }) {
                     // CalendarDetailView takes a binding to a certain item (specified by the index) to make it editable
-                    CalendarDetailView(item: $calendarItemsToday[index])
+                    CalendarDetailView(item: $calendarItems[index])
                         // Make the sheet oben to 40% of the screen
                         .presentationDetents([.fraction(0.4)])
                 }
