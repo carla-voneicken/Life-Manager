@@ -11,12 +11,18 @@ struct WeekdayHeaderView: View {
     @Binding var displayedMonth: Date
     
     // Users current calendar settings (e.g. locale and first day of the week)
-    let calendar = Calendar.current
+    var calendar: Calendar = {
+        var calendar = Calendar.current
+//        calendar.locale = Locale.autoupdatingCurrent
+        calendar.locale = Locale(identifier: "de_DE") // Set calendar locale to German so the weekdays are shown in German
+        return calendar
+    }()
     
     let formatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "MMMM yyyy" // full month name and year
-        return f
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM yyyy" // full month name and year
+        formatter.locale = Locale(identifier: "de_DE") // get the German month names
+        return formatter
     }()
     
     // Array of short names for weekdays (Sunday is the first day by default, that's why we add it at the end)

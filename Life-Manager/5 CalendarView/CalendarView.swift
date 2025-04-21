@@ -11,7 +11,12 @@ struct CalendarView: View {
         @State var displayedMonth: Date = Date()
         @State var selectedDate: Date? = Date()
 
-        let calendar = Calendar.current
+        var calendar: Calendar = {
+            var calendar = Calendar.current
+    //        calendar.locale = Locale.autoupdatingCurrent
+            calendar.locale = Locale(identifier: "de_DE")
+            return calendar
+        }()
 
         var body: some View {
             ScrollView {
