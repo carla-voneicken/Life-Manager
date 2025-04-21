@@ -10,6 +10,8 @@ import SwiftUI
 struct CalendarView: View {
         @State var displayedMonth: Date = Date()
         @State var selectedDate: Date? = Date()
+        @State private var calendarItems = CalendarItem.samples
+        @State private var selectedCalendarItem: CalendarItem? = nil
 
         var calendar: Calendar = {
             var calendar = Calendar.current
@@ -35,7 +37,7 @@ struct CalendarView: View {
                                         calendar: calendar,
                                         displayedMonth: displayedMonth,
                                         selectedDate: selectedDate,
-                                        calendarItems: CalendarItem.samples
+                                        calendarItems: calendarItems
                                     )
                             // When date isn't selected, select it, otherwise unselect it
                             .onTapGesture {
@@ -56,7 +58,7 @@ struct CalendarView: View {
                     // Display task (if a day is selected, just tasks for the day, otherwise all tasks)
                     VStack(alignment: .leading, spacing: 8) {
                         // if a day is selecte, set visibleTasks to an array of tasks for the selected day, otherwise set it to the array of all tasks
-                        let visibleCalendarEntries = CalendarItem.samples.filter { calendar.isDate($0.startDate, inSameDayAs: selectedDate!) }
+                        let visibleCalendarEntries = calendarItems.filter { calendar.isDate($0.startDate, inSameDayAs: selectedDate!) }
                         // If visibleTasks is empty, show the text "No tasks for this day"
                         if visibleCalendarEntries.isEmpty {
                             Text("Keine Einträge für diesen Tag.")
@@ -73,6 +75,9 @@ struct CalendarView: View {
                                                 .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0 , y: 2)
                                             )
                                         .padding(.vertical, 4)
+                                        .onTapGesture {
+                                            selectedCalendarItem = entry
+                                        }
                                 }
                             }
                         }
@@ -81,6 +86,22 @@ struct CalendarView: View {
                     Spacer()
                 }
                 .padding(10)
+            }
+            // MARK: Modal sheet for calendar items
+            .sheet(isPresented: Binding<Bool>(
+                // Handle the sheet logic to display the sheet when the selected item is not nil (get:) and set it to nil once the sheet is dismissed (set:)
+                get: { selectedCalendarItem != nil },
+                // $0 is the Boolean value that SwiftUI provides when the sheet is being presented (true) or dismissed (false)
+                set: { if !$0 { selectedCalendarItem = nil } }
+            )) {
+                // Only if the selectedCalendarItem exists and the index for that item in the calendarItemsToday array exists, run the code to open the sheet
+                if let selected = selectedCalendarItem,
+                   let index = calendarItems.firstIndex(where: { $0.id == selected.id }) {
+                    // CalendarDetailView takes a binding to a certain item (specified by the index) to make it editable
+                    CalendarDetailView(item: $calendarItems[index])
+                        // Make the sheet oben to 40% of the screen
+                        .presentationDetents([.fraction(0.4)])
+                }
             }
         }
         
