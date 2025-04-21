@@ -71,7 +71,7 @@ struct CalendarItem: Identifiable {
                 participants: [FamilyMember.familyMembers[0], FamilyMember.familyMembers[2]]
             ),
             CalendarItem(
-                title: "Musikvorführung",
+                title: "Geigenvorspiel",
                 startDate: stringToDate(dateString: "2025-04-28", timeString: "16:00")!,
                 endDate: stringToDate(dateString: "2025-04-28", timeString: "17:00")!,
                 location: "Schule",
