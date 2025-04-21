@@ -20,7 +20,7 @@ struct ContentView: View {
                }
            CalendarView()
                .tabItem {
-                   Label("Kalendar", systemImage: "calendar")
+                   Label("Kalender", systemImage: "calendar")
                }
            FamilyView()
                .tabItem {
