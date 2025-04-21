@@ -19,10 +19,12 @@ struct CalendarDetailView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
             
             // MARK: Time
-//            TextField("Uhrzeit", text: $item.startDate)
-//                .font(.subheadline)
-//                .bold()
-//                .textFieldStyle(RoundedBorderTextFieldStyle())
+            DatePicker("Start:", selection: $item.startDate, displayedComponents: [.date, .hourAndMinute])
+                .padding(0)
+     
+            DatePicker("Ende:", selection: $item.endDate, displayedComponents: [.date, .hourAndMinute])
+                .padding(0)
+
 
             // MARK: Description
             // Creating a custom Binding<String> manually using get and set closures to work around the fact that item.description is optional (String?), but TextEditor needs a non-optional String
