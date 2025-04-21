@@ -19,11 +19,27 @@ struct CalendarDetailView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
             
             // MARK: Time
+            // DatePicker for startDate
             DatePicker("Start:", selection: $item.startDate, displayedComponents: [.date, .hourAndMinute])
-                .padding(0)
+                // When the etartDate is changed, automatically change the day of the endDate as well
+                .onChange(of: item.startDate) { _, newStart in
+                    var updatedItem = item // make a mutable copy
+                    // Get the time of the endDate (we don't want to change that)
+                    let endDateComponents = Calendar.current.dateComponents([.hour, .minute], from: item.endDate)
+                    // Create a new endDate using the newStart date as the base and changing the hour/minute/second to the time of the endDate
+                    if let newEnd = Calendar.current.date(
+                        bySettingHour: endDateComponents.hour ?? 0,
+                        minute: endDateComponents.minute ?? 0,
+                        second: 0,
+                        of: newStart) {
+                            // Because item is a binding of a struct CalendarItem, we can't change it's variables directly, so instead we're creating a temporary copy (updatedItem) and then assigning that copy to the item
+                            updatedItem.endDate = newEnd
+                            item = updatedItem
+                        }
+                }
      
+            // DatePicker for endDate
             DatePicker("Ende:", selection: $item.endDate, displayedComponents: [.date, .hourAndMinute])
-                .padding(0)
 
 
             // MARK: Description
