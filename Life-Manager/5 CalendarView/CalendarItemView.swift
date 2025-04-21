@@ -27,7 +27,7 @@ struct CalendarItemView: View {
             }
             Spacer()
             VStack(alignment: .trailing) {
-                Text(item.time)
+                Text("\(item.startDate.shortTime) - \(item.endDate.shortTime)")
                     .font(.subheadline)
                 HStack(spacing: -10) {
                     ForEach(item.participants) { item in
@@ -52,7 +52,8 @@ struct CalendarItemView: View {
             CalendarItem(
                 title: "Zahnarzt",
                 description: "Prophylaxe",
-                time: "09:00 - 10:00",
+                startDate: stringToDate(dateString: "2025-04-21", timeString: "09:00")!,
+                endDate: stringToDate(dateString: "2025-04-21", timeString: "10:00")!,
                 location: "Praxis Zeit für schöne Zähne",
                 participants: [FamilyMember.familyMembers[0], FamilyMember.familyMembers[2]]
             )

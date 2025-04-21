@@ -19,10 +19,10 @@ struct CalendarDetailView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
             
             // MARK: Time
-            TextField("Uhrzeit", text: $item.time)
-                .font(.subheadline)
-                .bold()
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+//            TextField("Uhrzeit", text: $item.startDate)
+//                .font(.subheadline)
+//                .bold()
+//                .textFieldStyle(RoundedBorderTextFieldStyle())
 
             // MARK: Description
             // Creating a custom Binding<String> manually using get and set closures to work around the fact that item.description is optional (String?), but TextEditor needs a non-optional String
@@ -54,7 +54,8 @@ struct CalendarDetailView: View {
         CalendarItem(
             title: "Zahnarzt",
             description: "Prophylaxe",
-            time: "09:00 - 10:00",
+            startDate: stringToDate(dateString: "2025-04-21", timeString: "09:00")!,
+            endDate: stringToDate(dateString: "2025-04-21", timeString: "10:00")!,
             location: "Praxis Zeit für schöne Zähne",
             participants: [FamilyMember.familyMembers[0], FamilyMember.familyMembers[2]]
         )
