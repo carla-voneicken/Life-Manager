@@ -7,9 +7,10 @@ class Mission: Identifiable, ObservableObject, Equatable { // Wichtig um zu erke
     let id = UUID()
     @Published var name: String
     @Published var items: [Task] = []
-    
-    init(name: String) {
-        self.name = name
+    @Published var color: Color  // Füge eine Farbe hinzu
+       init(name: String, color: Color = .blue) {  // Standardfarbe ist Blau
+           self.name = name
+           self.color = color
     }
     
     // Equatable-Konformität - vergleicht die verschiedenen Id´s
@@ -20,10 +21,10 @@ class Mission: Identifiable, ObservableObject, Equatable { // Wichtig um zu erke
 struct TaskView: View {
     @State private var newMissionTitle: String = ""
     @State private var missions: [Mission] = [
-        Mission(name: "Haushalt"),
-        Mission(name: "Sport"),
-        Mission(name: "Urlaub"),
-        Mission(name: "Kinder")
+        Mission(name: "Haushalt", color: .red),
+        Mission(name: "Sport", color: .yellow),
+        Mission(name: "Urlaub", color: .purple),
+        Mission(name: "Kinder", color: .mint)
     ]
     @State private var selectedMission: Mission?
     
@@ -60,17 +61,8 @@ struct TaskView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
                         ForEach(missions) { mission in
-                            Button {
-                                selectedMission = mission
-                            } label: {
-                                Text(mission.name)
-                                    .frame(width: 100, height: 30)
-                                    .background(backgroundColor(for: mission))
-                                    .border(Color.blue, width: 0)
-                                    .cornerRadius(20)
-                            }
+                                                   MissionButtonView(mission: mission, selectedMission: $selectedMission)
                         }
-                        
                     }
                 }
                 if let selectedMission = selectedMission {
