@@ -25,8 +25,22 @@ struct MissionButtonView_Previews: PreviewProvider {
     static var previews: some View {
         // Erstelle eine Beispielmission mit einer Farbe
         let exampleMission = Mission(name: "Test Mission")
-        exampleMission.color = .orange  
-        return MissionButtonView(mission: exampleMission, selectedMission: .constant(nil))
+        exampleMission.color = .orange
+        
+        @State var selectedMission: Mission? = nil
+        
+        return MissionButtonView(mission: exampleMission, selectedMission: $selectedMission)
             .previewLayout(.sizeThatFits)
+    }
+}
+
+//sucht sich die Farbe zufällig raus zwischen 0 und 1 und erstellt die Farbe 
+extension Color {
+    static func random() -> Color {
+        return Color(
+            red:   .random(in: 0...1),
+            green: .random(in: 0...1),
+            blue:  .random(in: 0...1)
+        )
     }
 }

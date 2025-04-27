@@ -77,7 +77,7 @@ struct TaskView: View {
     }
     func addNewMission() {
         if !newMissionTitle.isEmpty {
-            let newMission = Mission(name: newMissionTitle)
+            let newMission = Mission(name: newMissionTitle, color: Color.random())
             missions.append(newMission)
             newMissionTitle = ""
         }
