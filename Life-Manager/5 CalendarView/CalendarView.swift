@@ -8,12 +8,11 @@
 import SwiftUI
 
 struct CalendarView: View {
-        @State var displayedMonth: Date = Date()
+        @State var todaysDate: Date = Date()
         @State var selectedDate: Date? = Date()
 
         var calendar: Calendar = {
             var calendar = Calendar.current
-    //        calendar.locale = Locale.autoupdatingCurrent
             calendar.locale = Locale(identifier: "de_DE")
             return calendar
         }()
@@ -22,7 +21,10 @@ struct CalendarView: View {
             ScrollView {
                 VStack(spacing: 12) {
                     // Display selected month with navigation arrows and the row of weekdays
-                    WeekdayHeaderView(displayedMonth: $displayedMonth)
+                    VStack(spacing: 24) {
+                        MonthHeaderView(displayedMonth: $todaysDate)
+                        WeekdayHeaderView()
+                    }
                     
                     // Get the array of days for the current month
                     let days = generateMonthGrid()
@@ -33,7 +35,7 @@ struct CalendarView: View {
                             CalendarDayCell(
                                         date: date,
                                         calendar: calendar,
-                                        displayedMonth: displayedMonth,
+                                        displayedMonth: todaysDate,
                                         selectedDate: selectedDate,
                                         calendarItems: CalendarItem.samples
                                     )
@@ -51,7 +53,7 @@ struct CalendarView: View {
                         }
                     }
                     
-                    Divider().padding(.top,20)
+                    Divider().padding(.top, 20)
                     
                     // Display task (if a day is selected, just tasks for the day, otherwise all tasks)
                     VStack(alignment: .leading, spacing: 8) {
@@ -88,18 +90,18 @@ struct CalendarView: View {
         // calendar.dateInterval(of:for:) -> returns the starting time and duration of a given calendar component that CONTAINS a given date
         func generateMonthGrid() -> [Date] {
             // monthInterval = start and end dates of the month containing displayedMonth -> Returns a DateInterval from the 1st of the month to the start of the next month
-            guard let monthInterval = calendar.dateInterval(of: .month, for: displayedMonth),
+            guard let monthInterval = calendar.dateInterval(of: .month, for: todaysDate),
                   // Gets the first full week that contains the first day of the month (possibly also containing days of the month before)
                   let firstWeek = calendar.dateInterval(of: .weekOfMonth, for: monthInterval.start),
                   // Gets the last full week that contains the last day of the month. (Subtracts 1 second from monthInterval.end so that we're still inside the last day of the month)
                   let lastWeek = calendar.dateInterval(of: .weekOfMonth, for: monthInterval.end - 1)
             else { return [] } // if there is an error, return an empty array
-            // stride(from:to:by:) -> returns a sequence from a starting value to, but not including, an end value, stepping by the specified amount
+            // stride(from:to:by:) -> returns a sequence from a starting value to an end value, stepping by the specified amount
+            // Because lastWeek.end actually points to the first second AFTER the last week, we have to subtract 1 second to stay within the targeted week
             // 86400 = number of seconds in a day
             // Return an array of days starting from the beginning of the first week to the end of the last week
             return Array(stride(from: firstWeek.start, through: lastWeek.end - 1, by: 86400))
         }
-
 }
 
 #Preview {
