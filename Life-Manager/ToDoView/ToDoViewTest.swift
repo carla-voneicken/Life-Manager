@@ -9,15 +9,13 @@ import SwiftUI
 
 
 struct ToDoViewTest: View {
-    @Environment(\.appColors) var appColors
     
     var body: some View {
-        @Environment(\.appColors) var appColors
         VStack {
-            @Environment(\.appColors) var appColors
+          
             
             HStack(){
-                @Environment(\.appColors) var appColors
+    
                 Spacer()
                 Button(action: { }) {
                     Image(systemName: "plus.circle.fill")
@@ -45,7 +43,7 @@ struct ToDoViewTest: View {
             .padding(.horizontal)
             
             VStack(alignment: .leading) {
-                @Environment(\.appColors) var appColors
+              
                 List {
                     Text("Urlaub")
                     Text("Kochen")

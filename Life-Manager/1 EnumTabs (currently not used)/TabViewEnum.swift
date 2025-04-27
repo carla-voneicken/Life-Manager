@@ -5,7 +5,7 @@
 //  Created by Christiane Roth on 13.04.25.
 //
 import SwiftUI
-
+/*
 enum TabViewEnum: Identifiable, CaseIterable, View {
     case todayView, calendarView, familyView, shoppingListView, toDoView
     var id: Self { self }
@@ -41,4 +41,4 @@ enum TabViewEnum: Identifiable, CaseIterable, View {
         }
     }
 }
-
+*/

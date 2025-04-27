@@ -1,5 +1,5 @@
 import SwiftUI
-
+/*
 struct AppColors {
     let AccentColor: Color
     let PrColor: Color
@@ -16,3 +16,4 @@ struct AppColors {
     }
     
 }
+*/

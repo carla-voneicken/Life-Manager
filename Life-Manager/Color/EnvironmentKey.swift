@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+/*
 private struct AppColorKey : EnvironmentKey {
     static let defaultValue = AppColors()
 }
@@ -23,5 +23,5 @@ extension View {
             }
         }
 
-    
+    */
 

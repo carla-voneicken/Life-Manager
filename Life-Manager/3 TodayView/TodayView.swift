@@ -25,6 +25,8 @@ struct TodayView: View {
     }
     
     var body: some View {
+        let startColor = Color("BackgroundColor")
+        let endColor = Color("SeColor")
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 8) {
@@ -87,7 +89,12 @@ struct TodayView: View {
                     .padding(.horizontal)
                 }
             }
-            .background(Color(.systemGroupedBackground))
+          //  .background(Color(.systemGroupedBackground))
+            .frame(maxWidth: .infinity, maxHeight: .infinity) // Füge diesen Frame hinzu
+                 .background {
+                     LinearGradient(colors: [startColor, endColor], startPoint: .topLeading, endPoint: .bottomTrailing)
+                         .edgesIgnoringSafeArea(.all)
+                 }
             .navigationTitle("Heute, \(formattedDate)")
             .toolbar {
                 // Link to profile/settings
