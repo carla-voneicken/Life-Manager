@@ -27,6 +27,7 @@ struct TaskView: View {
         Mission(name: "Kinder", color: .mint)
     ]
     @State private var selectedMission: Mission?
+    @State private var showPopup: Bool = false
     
 //  Hintergrundfarbe bei Auswahl
     private func backgroundColor(for mission: Mission) -> Color {
@@ -43,8 +44,8 @@ struct TaskView: View {
             VStack {
                 HStack {
                     Spacer()
-                    TextField("Neue Mission", text: $newMissionTitle)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                  //  TextField("Neue Mission", text: $newMissionTitle)
+                  //      .textFieldStyle(RoundedBorderTextFieldStyle())
                         .padding()
                     Image(systemName: "plus.circle.fill")
                         .resizable()
@@ -52,7 +53,7 @@ struct TaskView: View {
                         .foregroundColor(.green)
                         .padding()
                         .onTapGesture {
-                            addNewMission()
+                            showPopup = true
                         }
                 }
                 .padding(.trailing, 10)
@@ -72,17 +73,82 @@ struct TaskView: View {
                 }
                 Spacer()
             }
-            .navigationTitle("To-Do Liste")
+         //   .navigationTitle("To-Do Liste")
+            .overlay(
+                           Group {
+                               if showPopup {
+                                   CustomPopup(showPopup: $showPopup, newMissionTitle: $newMissionTitle, addNewMission: addNewMission)
+                                       .transition(.scale)
+                               }
+                           }
+                     )
+                }
         }
-    }
+     //   .alert(alertTitle, isPresented: $showAlert) { TextField("", text: $newMissionTitle)
+   //         Button("Hinzufügen") {
+     //           addNewMission()
+    //        }
+   //         Button("Abbrechen", role: .cancel) {}
+   //     }
+  //  }
     func addNewMission() {
         if !newMissionTitle.isEmpty {
             let newMission = Mission(name: newMissionTitle, color: Color.random())
             missions.append(newMission)
             newMissionTitle = ""
         }
+        showPopup = false  //Popup schließen
     }
 }
+
+struct CustomPopup: View {
+    @Binding var showPopup: Bool
+    @Binding var newMissionTitle: String
+    var addNewMission: () -> Void
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("New Task")
+                .font(.headline)
+                .padding()
+            TextField("", text: $newMissionTitle)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding(.horizontal)
+            HStack {
+                Button("Hinzufügen") {
+                    addNewMission()
+                }
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+                .padding(.horizontal)
+                
+                Button("Abbrechen") {
+                    withAnimation {
+                        showPopup = false
+                    }
+                }
+                .padding()
+                .background(Color.pink)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+                .padding(.horizontal)
+            }
+        }
+        .frame(width: 300, height: 200)
+        .background(Color.pink.opacity(0.3))
+        .cornerRadius(10)
+        .padding()
+        .transition(.scale)
+        .zIndex(1)
+    
+       
+    }
+      
+}
+
+
 struct MissionDetailView: View {
     @ObservedObject var mission: Mission
     @State private var newTaskName = ""
