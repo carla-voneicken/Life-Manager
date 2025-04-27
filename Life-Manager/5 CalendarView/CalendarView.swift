@@ -84,10 +84,10 @@ struct CalendarView: View {
             }
         }
         
-        // Function to generate the month grid, returns an array of 42 Dates
+        // Function to generate the month grid, returns an array for the days that should be displayed (35 or 42 days, depending on the month)
         // calendar.dateInterval(of:for:) -> returns the starting time and duration of a given calendar component that CONTAINS a given date
         func generateMonthGrid() -> [Date] {
-            // monthInterval = start and end dates of the month containing displayedMonth -> Returns a DateInterval from the 1st of the month tothe start of the next month
+            // monthInterval = start and end dates of the month containing displayedMonth -> Returns a DateInterval from the 1st of the month to the start of the next month
             guard let monthInterval = calendar.dateInterval(of: .month, for: displayedMonth),
                   // Gets the first full week that contains the first day of the month (possibly also containing days of the month before)
                   let firstWeek = calendar.dateInterval(of: .weekOfMonth, for: monthInterval.start),
@@ -97,7 +97,7 @@ struct CalendarView: View {
             // stride(from:to:by:) -> returns a sequence from a starting value to, but not including, an end value, stepping by the specified amount
             // 86400 = number of seconds in a day
             // Return an array of days starting from the beginning of the first week to the end of the last week
-            return Array(stride(from: firstWeek.start, through: lastWeek.end, by: 86400))
+            return Array(stride(from: firstWeek.start, through: lastWeek.end - 1, by: 86400))
         }
 
 }
