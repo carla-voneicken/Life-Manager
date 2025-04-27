@@ -24,12 +24,15 @@ struct CalendarWeeklyView: View {
         ScrollView {
             VStack(spacing: 0) {
                 // Header: Days
-                WeekHeaderView(displayedWeek: $todaysDate)
-                HStack(spacing: 0) {
-                    Text("") // Empty top-left corner
-                        .frame(width: 40) // Adjust for hour labels
-                    WeekdayHeaderView()
+                VStack {
+                    WeekHeaderView(displayedWeek: $todaysDate)
+                    HStack(spacing: 0) {
+                        Text("") // Empty top-left corner
+                            .frame(width: 40) // Adjust for hour labels
+                        WeekdayHeaderView()
+                    }
                 }
+                .padding(.vertical)
                 
                 // Grid: Hours x Days
                 ForEach(hours, id: \.self) { hour in

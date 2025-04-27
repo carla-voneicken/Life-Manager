@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CalendarView: View {
+struct MonthlyCalendarView: View {
         @State var todaysDate: Date = Date()
         @State var selectedDate: Date? = Date()
 
@@ -105,5 +105,5 @@ struct CalendarView: View {
 }
 
 #Preview {
-    CalendarView()
+    MonthlyCalendarView()
 }

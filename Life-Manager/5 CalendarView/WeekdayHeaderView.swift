@@ -39,10 +39,14 @@ struct WeekdayHeaderView: View {
                     .font(.system(size: 15))
                     .frame(maxWidth: .infinity) // make each day take equal space in the row
                 
+                    .padding(.vertical, 5)
                     .background(.gray.opacity(0.2), in:.rect(cornerRadius: 8))
-                    .padding(.vertical, 3)
             }
             
         }
     }
+}
+
+#Preview {
+    WeekdayHeaderView()
 }

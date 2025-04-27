@@ -19,7 +19,7 @@ struct WeekHeaderView: View {
     
     let formatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM yyyy" // full month name and year
+        formatter.dateFormat = "dd.MM" // full month name and year
         formatter.locale = Locale(identifier: "de_DE") // get the German month names
         return formatter
     }()

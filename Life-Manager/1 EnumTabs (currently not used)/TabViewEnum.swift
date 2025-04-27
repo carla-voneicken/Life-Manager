@@ -30,7 +30,7 @@ enum TabViewEnum: Identifiable, CaseIterable, View {
         case .todayView:
             TodayView()
         case .calendarView:
-            CalendarView()
+            MonthlyCalendarView()
         case .familyView:
             FamilyView()
         case .shoppingListView:
