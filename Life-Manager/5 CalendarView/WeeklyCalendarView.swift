@@ -8,37 +8,105 @@
 import SwiftUI
 
 struct CalendarWeeklyView: View {
-    @State var todaysDate: Date = Date()
-    @State var selectedDate: Date? = Date()
-
-    var calendar: Calendar = {
+    let calendar: Calendar = {
         var calendar = Calendar.current
-        calendar.locale = Locale(identifier: "de_DE")
+        calendar.locale = Locale(identifier: "de_DE") // Set calendar locale to German so the weekdays are shown in German
         return calendar
     }()
     
+    @State var displayedWeek: Date = Date()
+    
+    var daysOfWeek: [Date] {
+        // Get the weekInterval for the displayedWeek that is actually a Date
+        guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: displayedWeek) else { return [] }
+        // Return the interval in form of an array of dates
+        return (0..<7).compactMap { day in
+            calendar.date(byAdding: .day, value: day, to: weekInterval.start)
+        }
+    }
+
+    let hours = Array(0..<24) // 0 to 23""
+
+    let dayFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d."
+        return formatter
+    }()
+
+    let dayMonthFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "de_DE")
+        formatter.dateFormat = "d. MMMM"
+        return formatter
+    }()
+    
+    let dayMonthYearFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "de_DE")
+        formatter.dateFormat = "d. MMMM yyyy"
+        return formatter
+    }()
+
+    
     var body: some View {
-        let daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-        let hours = Array(0..<24) // 0 to 23
         
         ScrollView {
             VStack(spacing: 0) {
-                // Header: Days
+                // Header displaying the week interval, weekdays and dates
                 VStack {
-                    WeekHeaderView(displayedWeek: $todaysDate)
+                    // MARK: Display of week interval and navigation arrows
+                    HStack {
+                        Button(action: { changeWeek(by: -1) }) {
+                            Image(systemName: "chevron.left")
+                        }
+                        Spacer()
+                        
+                        // Display week interval
+                        if calendar.isDate(daysOfWeek[0], equalTo: daysOfWeek[6], toGranularity: .month) {
+                            // Same month → only show full month once
+                            Text("\(dayFormatter.string(from: daysOfWeek[0])) - \(dayMonthFormatter.string(from: daysOfWeek[6]))")
+                        } else {
+                            if calendar.isDate(daysOfWeek[0], equalTo: daysOfWeek[6], toGranularity: .year) {
+                                    // Different months, same year → show month on both
+                                    Text("\(dayMonthFormatter.string(from: daysOfWeek[0])) - \(dayMonthFormatter.string(from: daysOfWeek[6]))")
+                                } else {
+                                    // Different months and year → show month and year on both
+                                    Text("\(dayMonthYearFormatter.string(from: daysOfWeek[0])) - \(dayMonthYearFormatter.string(from: daysOfWeek[6]))")
+                                }
+                        }
+                        Spacer()
+                        Button(action: { changeWeek(by: 1) }) {
+                            Image(systemName: "chevron.right")
+                        }
+                    }
+                    .tint(.primary)
+                    .padding()
+                    
+                    // MARK: Display of weekdays
                     HStack(spacing: 0) {
                         Text("") // Empty top-left corner
                             .frame(width: 40) // Adjust for hour labels
                         WeekdayHeaderView()
                     }
+                    
+                    // MARK: Display of dates of the columns
+                    HStack(spacing: 0) {
+                        Text("") // Empty top-left corner
+                            .frame(width: 40) // Adjust for hour labels
+                        ForEach(daysOfWeek, id:\.self) { day in
+                            Text("\(calendar.component(.day, from: day))")
+                                .font(.system(size: 15))
+                                .frame(maxWidth: .infinity) // make each day take equal space in the row
+                        }
+                    }
                 }
                 .padding(.vertical)
                 
-                // Grid: Hours x Days
+                // MARK: Grid of hours and days
                 ForEach(hours, id: \.self) { hour in
                     HStack(spacing: 0) {
                         Text(String(format: "%02d:00", hour))
-                            .frame(width: 38)
+                            .frame(width: 40)
                             .font(.footnote)
                             .padding(2)
                         
@@ -53,6 +121,11 @@ struct CalendarWeeklyView: View {
             }
         }
     }
+    
+    private func changeWeek(by value: Int) {
+        displayedWeek = calendar.date(byAdding: .weekOfYear, value: value, to: displayedWeek) ?? displayedWeek
+    }
+    
 }
 
 #Preview {
