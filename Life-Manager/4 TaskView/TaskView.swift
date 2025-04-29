@@ -1,0 +1,206 @@
+//
+//  TaskView.swift
+//  Life-Manager
+//
+//  Created by Christiane Roth on 29.04.25.
+//
+
+import SwiftUI
+struct Task: Identifiable {
+    let id = UUID()
+    var name: String
+}
+class Mission: Identifiable, ObservableObject, Equatable { // Wichtig um zu erkennen wo welcher String hingeschrieben wird. Ob lhs und rhs gleich sind oder nicht
+    let id = UUID()
+    @Published var name: String
+    @Published var items: [Task] = []
+    @Published var color: Color  // Füge eine Farbe hinzu
+       init(name: String, color: Color = .blue) {  // Standardfarbe ist Blau
+           self.name = name
+           self.color = color
+    }
+    
+    // Equatable-Konformität - vergleicht die verschiedenen Id´s
+    static func == (lhs: Mission, rhs: Mission) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+struct TaskView: View {
+    @State private var newMissionTitle: String = ""
+    @State private var missions: [Mission] = [
+        Mission(name: "Haushalt", color: .red),
+        Mission(name: "Sport", color: .yellow),
+        Mission(name: "Urlaub", color: .purple),
+        Mission(name: "Kinder", color: .mint)
+    ]
+    @State private var selectedMission: Mission?
+    @State private var showPopup: Bool = false
+    
+//  Hintergrundfarbe bei Auswahl
+    private func backgroundColor(for mission: Mission) -> Color {
+        if let selected = selectedMission {
+            return selected == mission ? Color.green.opacity(0.5) : Color.blue.opacity(0.2)
+        } else {
+// Wenn selectedMission nil ist, gib eine Standardfarbe zurück.
+            return Color.blue.opacity(0.2)
+        }
+    }
+    
+    var body: some View {
+        NavigationStack {
+            VStack {
+                HStack {
+                    Spacer()
+                  //  TextField("Neue Mission", text: $newMissionTitle)
+                  //      .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding()
+                    Image(systemName: "plus.circle.fill")
+                        .resizable()
+                        .frame(width: 40, height: 40)
+                        .foregroundColor(.green)
+                        .padding()
+                        .onTapGesture {
+                            showPopup = true
+                        }
+                }
+                .padding(.trailing, 10)
+
+
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        ForEach(missions) { mission in
+                                                   MissionButtonView(mission: mission, selectedMission: $selectedMission)
+                        }
+                    }
+                }
+                if let selectedMission = selectedMission {
+                    MissionDetailView(mission: selectedMission)
+                } else {
+                  
+                }
+                Spacer()
+            }
+         //   .navigationTitle("To-Do Liste")
+            .overlay(
+                           Group {
+                               if showPopup {
+                                   CustomPopup(showPopup: $showPopup, newMissionTitle: $newMissionTitle, addNewMission: addNewMission)
+                                       .transition(.scale)
+                               }
+                           }
+                     )
+                }
+        }
+     //   .alert(alertTitle, isPresented: $showAlert) { TextField("", text: $newMissionTitle)
+   //         Button("Hinzufügen") {
+     //           addNewMission()
+    //        }
+   //         Button("Abbrechen", role: .cancel) {}
+   //     }
+  //  }
+    func addNewMission() {
+        if !newMissionTitle.isEmpty {
+            let newMission = Mission(name: newMissionTitle, color: Color.random())
+            missions.append(newMission)
+            newMissionTitle = ""
+        }
+        showPopup = false  //Popup schließen
+    }
+}
+
+struct CustomPopup: View {
+    @Binding var showPopup: Bool
+    @Binding var newMissionTitle: String
+    var addNewMission: () -> Void
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("New Task")
+                .font(.headline)
+                .padding()
+            TextField("", text: $newMissionTitle)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding(.horizontal)
+            HStack {
+                Button("Hinzufügen") {
+                    addNewMission()
+                }
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+                .padding(.horizontal)
+                
+                Button("Abbrechen") {
+                    withAnimation {
+                        showPopup = false
+                    }
+                }
+                .padding()
+                .background(Color.pink)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+                .padding(.horizontal)
+            }
+        }
+        .frame(width: 300, height: 200)
+        .background(Color.pink.opacity(0.3))
+        .cornerRadius(10)
+        .padding()
+        .transition(.scale)
+        .zIndex(1)
+    
+       
+    }
+      
+}
+
+
+struct MissionDetailView: View {
+    @ObservedObject var mission: Mission
+    @State private var newTaskName = ""
+    @State private var struckThroughTask2 = Set<UUID>()
+    
+    var body: some View {
+        VStack {
+            Text("Artikel für \(mission.name)")
+                .font(.title)
+                .padding()
+            HStack {
+                TextField("New Task", text: $newTaskName)
+                    .textFieldStyle(.roundedBorder)
+                Button {
+                    if !newTaskName.isEmpty {
+                        mission.items.append(Task(name: newTaskName))
+                        newTaskName = ""
+                    }
+                } label: {
+                    Image(systemName: "plus")
+                }
+                .disabled(newTaskName.isEmpty)
+            }
+            .padding()
+            List {
+                ForEach(mission.items) { item in
+                    HStack {
+                        Text(item.name)
+                            .strikethrough(struckThroughTask2.contains(item.id), color: .red)
+                            .onTapGesture {
+                                if struckThroughTask2.contains(item.id) {
+                                    struckThroughTask2.remove(item.id)
+                                } else {
+                                    struckThroughTask2.insert(item.id)
+                                }
+                            }
+                    }
+                }
+                .onDelete { indexSet in
+                    mission.items.remove(atOffsets: indexSet)
+                }
+            }
+        }
+    }
+}
+#Preview {
+    TaskView()
+}

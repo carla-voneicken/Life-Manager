@@ -5,7 +5,7 @@
 //  Created by Christiane Roth on 13.04.25.
 //
 import SwiftUI
-
+/*
 struct DummyMissionView: View {
     var body : some View {
         NavigationStack {
@@ -65,4 +65,4 @@ struct DummyMissionView: View {
 #Preview {
     DummyMissionView()
 }
-
+*/
