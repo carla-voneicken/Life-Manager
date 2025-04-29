@@ -18,36 +18,7 @@ struct WeeklyCalendarView: View {
             calendar.date(byAdding: .day, value: day, to: weekInterval.start)
         }
     }
-    
-    let dayFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d."
-        return formatter
-    }()
 
-    let dayMonthFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "de_DE")
-        formatter.dateFormat = "d. MMMM"
-        return formatter
-    }()
-    
-    let dayMonthYearFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "de_DE")
-        formatter.dateFormat = "d. MMMM yyyy"
-        return formatter
-    }()
-    
-    // Method to format the weekday using the calendar's locale
-    let weekdayFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "de_DE")
-        formatter.dateFormat = "EEE"
-        return formatter
-    }()
-
-    // 1 fixed column (hours) + 7 flexible columns (days)
     private var columns: [GridItem] {
         Array(repeating: GridItem(.flexible(), spacing: 0), count: 8)
     }
@@ -62,14 +33,14 @@ struct WeeklyCalendarView: View {
             // Display week interval
             if calendar.isDate(daysOfWeek[0], equalTo: daysOfWeek[6], toGranularity: .month) {
                 // Same month → only show full month once
-                Text("\(dayFormatter.string(from: daysOfWeek[0])) - \(dayMonthFormatter.string(from: daysOfWeek[6]))")
+                Text("\(daysOfWeek[0].day) - \(daysOfWeek[6].dayMonth)")
             } else {
                 if calendar.isDate(daysOfWeek[0], equalTo: daysOfWeek[6], toGranularity: .year) {
                         // Different months, same year → show month on both
-                        Text("\(dayMonthFormatter.string(from: daysOfWeek[0])) - \(dayMonthFormatter.string(from: daysOfWeek[6]))")
+                    Text("\(daysOfWeek[0].dayMonth) - \(daysOfWeek[6].dayMonth)")
                     } else {
                         // Different months and year → show month and year on both
-                        Text("\(dayMonthYearFormatter.string(from: daysOfWeek[0])) - \(dayMonthYearFormatter.string(from: daysOfWeek[6]))")
+                        Text("\(daysOfWeek[0].dayMonthYear) - \(daysOfWeek[6].dayMonthYear)")
                     }
             }
             Spacer()
@@ -89,7 +60,7 @@ struct WeeklyCalendarView: View {
 
                 // Day headers
                 ForEach(daysOfWeek, id: \.self) { date in
-                    Text(weekdayFormatter.string(from: date).prefix(2))
+                    Text(date.weekday.prefix(2))
                         .frame(height: 30)
                         .font(.subheadline)
                         .frame(maxWidth: .infinity)

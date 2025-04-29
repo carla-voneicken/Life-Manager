@@ -46,7 +46,3 @@ struct WeekdayHeaderView: View {
         }
     }
 }
-
-#Preview {
-    WeekdayHeaderView()
-}

@@ -26,27 +26,6 @@ struct CalendarWeeklyView: View {
     }
 
     let hours = Array(0..<24) // 0 to 23""
-
-    let dayFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d."
-        return formatter
-    }()
-
-    let dayMonthFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "de_DE")
-        formatter.dateFormat = "d. MMMM"
-        return formatter
-    }()
-    
-    let dayMonthYearFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "de_DE")
-        formatter.dateFormat = "d. MMMM yyyy"
-        return formatter
-    }()
-
     
     var body: some View {
         let sidebarWidth: CGFloat = 45
@@ -65,14 +44,14 @@ struct CalendarWeeklyView: View {
                         // Display week interval
                         if calendar.isDate(daysOfWeek[0], equalTo: daysOfWeek[6], toGranularity: .month) {
                             // Same month → only show full month once
-                            Text("\(dayFormatter.string(from: daysOfWeek[0])) - \(dayMonthFormatter.string(from: daysOfWeek[6]))")
+                            Text("\(daysOfWeek[0].day) - \(daysOfWeek[6].dayMonth)")
                         } else {
                             if calendar.isDate(daysOfWeek[0], equalTo: daysOfWeek[6], toGranularity: .year) {
                                     // Different months, same year → show month on both
-                                    Text("\(dayMonthFormatter.string(from: daysOfWeek[0])) - \(dayMonthFormatter.string(from: daysOfWeek[6]))")
+                                Text("\(daysOfWeek[0].dayMonth) - \(daysOfWeek[6].dayMonth)")
                                 } else {
                                     // Different months and year → show month and year on both
-                                    Text("\(dayMonthYearFormatter.string(from: daysOfWeek[0])) - \(dayMonthYearFormatter.string(from: daysOfWeek[6]))")
+                                    Text("\(daysOfWeek[0].dayMonthYear) - \(daysOfWeek[6].dayMonthYear)")
                                 }
                         }
                         Spacer()
