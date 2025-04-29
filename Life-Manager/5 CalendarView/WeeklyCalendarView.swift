@@ -1,21 +1,15 @@
-//
-//  CalndarWeeklyView.swift
-//  Life-Manager
-//
-//  Created by Carla von Eicken on 27.04.25.
-//
-
 import SwiftUI
 
-struct CalendarWeeklyView: View {
+struct WeeklyCalendarView: View {
     let calendar: Calendar = {
         var calendar = Calendar.current
         calendar.locale = Locale(identifier: "de_DE") // Set calendar locale to German so the weekdays are shown in German
         return calendar
     }()
     
-    @State var displayedWeek: Date = Date()
+    let hours = Array(0..<24)
     
+    @State var displayedWeek: Date = Date()
     var daysOfWeek: [Date] {
         // Get the weekInterval for the displayedWeek that is actually a Date
         guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: displayedWeek) else { return [] }
@@ -24,9 +18,7 @@ struct CalendarWeeklyView: View {
             calendar.date(byAdding: .day, value: day, to: weekInterval.start)
         }
     }
-
-    let hours = Array(0..<24) // 0 to 23""
-
+    
     let dayFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "d."
@@ -47,80 +39,121 @@ struct CalendarWeeklyView: View {
         return formatter
     }()
 
-    
-    var body: some View {
-        let sidebarWidth: CGFloat = 45
+    // 1 fixed column (hours) + 7 flexible columns (days)
+    private var columns: [GridItem] {
+        Array(repeating: GridItem(.flexible(), spacing: 0), count: 8)
+    }
 
+    var body: some View {
+        HStack {
+            Button(action: { changeWeek(by: -1) }) {
+                Image(systemName: "chevron.left")
+            }
+            Spacer()
+            
+            // Display week interval
+            if calendar.isDate(daysOfWeek[0], equalTo: daysOfWeek[6], toGranularity: .month) {
+                // Same month → only show full month once
+                Text("\(dayFormatter.string(from: daysOfWeek[0])) - \(dayMonthFormatter.string(from: daysOfWeek[6]))")
+            } else {
+                if calendar.isDate(daysOfWeek[0], equalTo: daysOfWeek[6], toGranularity: .year) {
+                        // Different months, same year → show month on both
+                        Text("\(dayMonthFormatter.string(from: daysOfWeek[0])) - \(dayMonthFormatter.string(from: daysOfWeek[6]))")
+                    } else {
+                        // Different months and year → show month and year on both
+                        Text("\(dayMonthYearFormatter.string(from: daysOfWeek[0])) - \(dayMonthYearFormatter.string(from: daysOfWeek[6]))")
+                    }
+            }
+            Spacer()
+            Button(action: { changeWeek(by: 1) }) {
+                Image(systemName: "chevron.right")
+            }
+        }
+        .tint(.primary)
+        .padding()
+        
         ScrollView {
-            VStack(spacing: 0) {
-                // Header displaying the week interval, weekdays and dates
-                VStack {
-                    // MARK: Display of week interval and navigation arrows
-                    HStack {
-                        Button(action: { changeWeek(by: -1) }) {
-                            Image(systemName: "chevron.left")
-                        }
-                        Spacer()
-                        
-                        // Display week interval
-                        if calendar.isDate(daysOfWeek[0], equalTo: daysOfWeek[6], toGranularity: .month) {
-                            // Same month → only show full month once
-                            Text("\(dayFormatter.string(from: daysOfWeek[0])) - \(dayMonthFormatter.string(from: daysOfWeek[6]))")
-                        } else {
-                            if calendar.isDate(daysOfWeek[0], equalTo: daysOfWeek[6], toGranularity: .year) {
-                                    // Different months, same year → show month on both
-                                    Text("\(dayMonthFormatter.string(from: daysOfWeek[0])) - \(dayMonthFormatter.string(from: daysOfWeek[6]))")
-                                } else {
-                                    // Different months and year → show month and year on both
-                                    Text("\(dayMonthYearFormatter.string(from: daysOfWeek[0])) - \(dayMonthYearFormatter.string(from: daysOfWeek[6]))")
-                                }
-                        }
-                        Spacer()
-                        Button(action: { changeWeek(by: 1) }) {
-                            Image(systemName: "chevron.right")
-                        }
-                    }
-                    .tint(.primary)
-                    .padding()
-                    
-                    // MARK: Display of weekdays
-                    HStack(spacing: 0) {
-                        Text("") // Empty top-left corner
-                            .frame(width: sidebarWidth) // Adjust for hour labels
-                        WeekdayHeaderView()
-                    }
-                    
-                    // MARK: Display of dates of the columns
-                    HStack(spacing: 0) {
-                        Text("") // Empty top-left corner
-                            .frame(width: sidebarWidth) // Adjust for hour labels
-                        ForEach(daysOfWeek, id:\.self) { day in
-                            Text("\(calendar.component(.day, from: day))")
-                                .font(.system(size: 15))
-                                .frame(maxWidth: .infinity) // make each day take equal space in the row
-                        }
-                    }
+            // MARK: Header Row
+            LazyVGrid(columns: columns, spacing: 0) {
+                // Empty top-left corner
+                Text("")
+                    .frame(height: 30)
+
+                // Day headers
+                ForEach(daysOfWeek, id: \.self) { date in
+                    Text(date.formatted(Date.FormatStyle().weekday(.short)))
+                        .frame(height: 30)
+                        .font(.subheadline)
+                        .frame(maxWidth: .infinity)
+                        .background(Color.gray.opacity(0.1))
                 }
-                .padding(.vertical)
-                
-                // MARK: Grid of hours and days
+            }
+            
+            LazyVGrid(columns: columns, spacing: 0) {
+                // Empty top-left corner
+                Text("")
+                    .frame(height: 30)
+
+                // Day headers
+                ForEach(daysOfWeek, id: \.self) { date in
+                    Text(date.formatted(Date.FormatStyle().day(.twoDigits)))
+                        .frame(height: 30)
+                        .font(.subheadline)
+                        .frame(maxWidth: .infinity)
+                        .background(Color.gray.opacity(0.1))
+                }
+            }
+
+            // MARK: Grid Body
+            LazyVGrid(columns: columns, spacing: 0) {
                 ForEach(hours, id: \.self) { hour in
-                    HStack(spacing: 0) {
-                        Text(String(format: "%02d:00", hour))
-                            .frame(width: sidebarWidth)
-                            .font(.footnote)
-                            .padding(2)
-                        
-                        ForEach(daysOfWeek, id: \.self) { day in
-                            Rectangle()
-                                .stroke(Color.gray.opacity(0.5), lineWidth: 0.5)
-                                .frame(height: sidebarWidth)
-                                .background(Color.white)
-                        }
+                    // Hour label column
+                    cellView(content: String(format: "%02d:00", hour), isHourLabel: true)
+
+                    // Day columns
+                    ForEach(0..<7, id: \.self) { _ in
+                        cellView(content: "")
                     }
                 }
             }
         }
+        .gesture(
+            DragGesture()
+                .onEnded { value in
+                    if value.translation.width < -50 {
+                        // Swiped left → next week
+                        changeWeek(by: 1)
+                    } else if value.translation.width > 50 {
+                        // Swiped right → previous week
+                        changeWeek(by: -1)
+                    }
+                }
+        )
+    }
+    
+    @ViewBuilder
+    private func cellView(content: String, isHourLabel: Bool = false) -> some View {
+        ZStack {
+            Rectangle()
+                .fill(isHourLabel ? Color.gray.opacity(0.1) : Color.white)
+            
+            Text(content)
+                .font(.footnote)
+        }
+        .frame(height: 50)
+        .overlay(
+            Rectangle() // Right border
+                .frame(width: 0.5)
+                .foregroundColor(Color.gray.opacity(0.3)),
+            alignment: .trailing
+        )
+        .overlay(
+            Rectangle() // Bottom border
+                .frame(height: 0.5)
+                .foregroundColor(Color.gray.opacity(0.3)),
+            alignment: .bottom
+        )
+
     }
     
     private func changeWeek(by value: Int) {
@@ -129,6 +162,7 @@ struct CalendarWeeklyView: View {
     
 }
 
+
 #Preview {
-    CalendarWeeklyView()
+    WeeklyCalendarView()
 }
