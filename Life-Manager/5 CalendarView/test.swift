@@ -117,6 +117,18 @@ struct WeeklyCalendarView: View {
                 }
             }
         }
+        .gesture(
+            DragGesture()
+                .onEnded { value in
+                    if value.translation.width < -50 {
+                        // Swiped left → next week
+                        changeWeek(by: 1)
+                    } else if value.translation.width > 50 {
+                        // Swiped right → previous week
+                        changeWeek(by: -1)
+                    }
+                }
+        )
     }
     
     @ViewBuilder
