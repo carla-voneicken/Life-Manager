@@ -49,7 +49,8 @@ struct CalendarWeeklyView: View {
 
     
     var body: some View {
-        
+        let sidebarWidth: CGFloat = 45
+
         ScrollView {
             VStack(spacing: 0) {
                 // Header displaying the week interval, weekdays and dates
@@ -85,14 +86,14 @@ struct CalendarWeeklyView: View {
                     // MARK: Display of weekdays
                     HStack(spacing: 0) {
                         Text("") // Empty top-left corner
-                            .frame(width: 40) // Adjust for hour labels
+                            .frame(width: sidebarWidth) // Adjust for hour labels
                         WeekdayHeaderView()
                     }
                     
                     // MARK: Display of dates of the columns
                     HStack(spacing: 0) {
                         Text("") // Empty top-left corner
-                            .frame(width: 40) // Adjust for hour labels
+                            .frame(width: sidebarWidth) // Adjust for hour labels
                         ForEach(daysOfWeek, id:\.self) { day in
                             Text("\(calendar.component(.day, from: day))")
                                 .font(.system(size: 15))
@@ -106,14 +107,14 @@ struct CalendarWeeklyView: View {
                 ForEach(hours, id: \.self) { hour in
                     HStack(spacing: 0) {
                         Text(String(format: "%02d:00", hour))
-                            .frame(width: 40)
+                            .frame(width: sidebarWidth)
                             .font(.footnote)
                             .padding(2)
                         
                         ForEach(daysOfWeek, id: \.self) { day in
                             Rectangle()
                                 .stroke(Color.gray.opacity(0.5), lineWidth: 0.5)
-                                .frame(height: 40) // each hour row height
+                                .frame(height: sidebarWidth)
                                 .background(Color.white)
                         }
                     }
