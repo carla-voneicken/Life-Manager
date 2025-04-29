@@ -38,6 +38,14 @@ struct WeeklyCalendarView: View {
         formatter.dateFormat = "d. MMMM yyyy"
         return formatter
     }()
+    
+    // Method to format the weekday using the calendar's locale
+    let weekdayFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "de_DE")
+        formatter.dateFormat = "EEE"
+        return formatter
+    }()
 
     // 1 fixed column (hours) + 7 flexible columns (days)
     private var columns: [GridItem] {
@@ -81,7 +89,7 @@ struct WeeklyCalendarView: View {
 
                 // Day headers
                 ForEach(daysOfWeek, id: \.self) { date in
-                    Text(date.formatted(Date.FormatStyle().weekday(.short)))
+                    Text(weekdayFormatter.string(from: date).prefix(2))
                         .frame(height: 30)
                         .font(.subheadline)
                         .frame(maxWidth: .infinity)
