@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MonthlyCalendarView: View {
         @State var todaysDate: Date = Date()
-        @State var selectedDate: Date? = Date()
+        @State var selectedDate: Date = Date()
 
         var calendar: Calendar = {
             var calendar = Calendar.current
@@ -41,11 +41,10 @@ struct MonthlyCalendarView: View {
                                     )
                             // When date isn't selected, select it, otherwise unselect it
                             .onTapGesture {
-                                // Check if selectedDate is set, and if it's already the same day as the date the user just tapped
-                                // if let selected = selectedDate -> checks if selectedDate is non-nil, if it is, it unwraps it into a local constant called selected
+                                // Check if selectedDate is the same day as the date the user just tapped, if yes, we deselect it by setting it back to todaysDate, otherwise we select it by setting selectedDate to the tapped date
                                 // calendar.isDate(selected, inSameDayAs: date) -> compares just the day of two dates, returns true if selected and date fall on the same calendar day
-                                if let selected = selectedDate, calendar.isDate(selected, inSameDayAs: date) {
-                                    selectedDate = nil
+                                if calendar.isDate(selectedDate, inSameDayAs: date) {
+                                    selectedDate = todaysDate
                                 } else {
                                     selectedDate = date
                                 }
@@ -58,12 +57,14 @@ struct MonthlyCalendarView: View {
                     // Display task (if a day is selected, just tasks for the day, otherwise all tasks)
                     VStack(alignment: .leading, spacing: 8) {
                         // if a day is selecte, set visibleTasks to an array of tasks for the selected day, otherwise set it to the array of all tasks
-                        let visibleCalendarEntries = CalendarItem.samples.filter { calendar.isDate($0.startDate, inSameDayAs: selectedDate!) }
+                        let visibleCalendarEntries = CalendarItem.samples.filter { calendar.isDate($0.startDate, inSameDayAs: selectedDate) }
                         // If visibleTasks is empty, show the text "No tasks for this day"
                         if visibleCalendarEntries.isEmpty {
                             Text("Keine Einträge für diesen Tag.")
                                 .foregroundColor(.gray)
                         } else {
+                            Text("Termine für \(selectedDate.shortDate):")
+                                .font(.headline)
                             // Otherwise display all the tasks from the array (each containing the name and a circle)
                             ForEach(visibleCalendarEntries) { entry in
                                 HStack{
