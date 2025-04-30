@@ -31,11 +31,11 @@ struct WeekHeaderView: View {
             // Display week interval
             if calendar.isDate(daysOfWeek[0], equalTo: daysOfWeek[6], toGranularity: .month) {
                 // Same month → only show full month once
-                Text("\(daysOfWeek[0].day) - \(daysOfWeek[6].dayMonth)")
+                Text("\(daysOfWeek[0].day) - \(daysOfWeek[6].dayFullMonth)")
             } else {
                 if calendar.isDate(daysOfWeek[0], equalTo: daysOfWeek[6], toGranularity: .year) {
                         // Different months, same year → show month on both
-                    Text("\(daysOfWeek[0].dayMonth) - \(daysOfWeek[6].dayMonth)")
+                    Text("\(daysOfWeek[0].dayFullMonth) - \(daysOfWeek[6].dayFullMonth)")
                     } else {
                         // Different months and year → show month and year on both
                         Text("\(daysOfWeek[0].dayFullMonthYear) - \(daysOfWeek[6].dayFullMonthYear)")

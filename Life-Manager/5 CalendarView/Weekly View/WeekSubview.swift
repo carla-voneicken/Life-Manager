@@ -19,36 +19,47 @@ struct WeekSubview: View {
     
     var body: some View {
         ScrollView {
-            // MARK: Header Row
-            LazyVGrid(columns: columns, spacing: 0) {
-                // Empty top-left corner
-                Text("")
-                    .frame(height: 30)
+                VStack {
+                    // MARK: Header Row
+                    LazyVGrid(columns: columns, spacing: 0) {
+                        // Empty top-left corner
+                        Text("")
+                            .frame(height: 30)
 
-                // Day headers
-                ForEach(daysOfWeek, id: \.self) { date in
-                    Text(date.weekday.prefix(2))
-                        .frame(height: 30)
-                        .font(.subheadline)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.gray.opacity(0.1))
+                        // Day headers
+                        ForEach(daysOfWeek, id: \.self) { date in
+                            Text(date.weekday.prefix(1))
+                                .frame(height: 30)
+                                .font(.footnote)
+                                .frame(maxWidth: .infinity)
+                        }
+                    }
+                    
+                    
+                    LazyVGrid(columns: columns, spacing: 0) {
+                        // Empty top-left corner
+                        Text("")
+                            .frame(height: 30)
+
+                        // Day headers
+                        ForEach(daysOfWeek, id: \.self) { date in
+                            Text(date.formatted(Date.FormatStyle().day(.twoDigits)))
+                                .frame(height: 30)
+                                .font(.body)
+                                .frame(maxWidth: .infinity)
+                                .overlay {
+                                    Circle()
+                                        .stroke(lineWidth: 1)
+                                        .foregroundStyle(Calendar.current.isDateInToday(date) ? Color.primary : .clear)
+                                        .padding(-3)
+                                }
+
+                        }
+                    }
                 }
-            }
+                .padding(.bottom)
+                .background(.lightgreen)
             
-            LazyVGrid(columns: columns, spacing: 0) {
-                // Empty top-left corner
-                Text("")
-                    .frame(height: 30)
-
-                // Day headers
-                ForEach(daysOfWeek, id: \.self) { date in
-                    Text(date.formatted(Date.FormatStyle().day(.twoDigits)))
-                        .frame(height: 30)
-                        .font(.subheadline)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.gray.opacity(0.1))
-                }
-            }
 
             // MARK: Grid Body
             LazyVGrid(columns: columns, spacing: 0) {
@@ -68,23 +79,35 @@ struct WeekSubview: View {
     @ViewBuilder
     private func cellView(content: String, isHourLabel: Bool = false) -> some View {
         ZStack {
-            Rectangle()
-                .fill(isHourLabel ? Color.gray.opacity(0.1) : Color.white)
-            
-            Text(content)
+            if !isHourLabel {
+                Rectangle()
+                    .fill(Color.white)
+            }
+
+            Text(content == "00:00" ? "" : content)
                 .font(.footnote)
+                .foregroundColor(.black)
+                .offset(y: isHourLabel ? -25 : 0) // Half the cell height
         }
         .frame(height: 50)
         .overlay(
-            Rectangle() // Right border
-                .frame(width: 0.5)
-                .foregroundColor(Color.gray.opacity(0.3)),
+            Group {
+                if !isHourLabel {
+                    Rectangle() // Right border
+                        .frame(width: 0.5)
+                        .foregroundColor(Color.gray.opacity(0.3))
+                }
+            },
             alignment: .trailing
         )
         .overlay(
-            Rectangle() // Bottom border
-                .frame(height: 0.5)
-                .foregroundColor(Color.gray.opacity(0.3)),
+            Group {
+                if !isHourLabel {
+                    Rectangle() // Bottom border
+                        .frame(height: 0.5)
+                        .foregroundColor(Color.gray.opacity(0.3))
+                }
+            },
             alignment: .bottom
         )
 

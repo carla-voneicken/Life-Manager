@@ -57,9 +57,17 @@ extension Date {
         formatter.dateFormat = "d."
         return formatter.string(from: self)
     }
+    
+    // 30.4.
+    var dayMonth: String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "de_DE")
+        formatter.dateFormat = "d.M."
+        return formatter.string(from: self)
+    }
 
     // 30. April
-    var dayMonth: String {
+    var dayFullMonth: String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "de_DE")
         formatter.dateFormat = "d. MMMM"

@@ -3,68 +3,75 @@ import SwiftUI
 struct WeeklyCalendarView: View {
     
     @State private var currentDate: Date = Date()
+    
+    // dragOffset: tracks the horizontal drag distance, to allow moving the content when the user swipes (0 is the neutral, undragged position)
     @State private var dragOffset: CGFloat = 0
-    @State private var currentIndex: Int = 1 // Middle of 3 views
-    
-    let screenWidth = UIScreen.main.bounds.width
-    
     
     
     var body: some View {
-        HStack {
-            WeekHeaderView(displayedWeek: $currentDate)
-        }
-        .tint(.primary)
-        .padding()
-        
         let dates = [
             Calendar.current.date(byAdding: .weekOfYear, value: -1, to: currentDate)!,
             currentDate,
             Calendar.current.date(byAdding: .weekOfYear, value: 1, to: currentDate)!
         ]
         
-        GeometryReader { geometry in
+        VStack (spacing: 0){
             HStack(spacing: 0) {
-                ForEach(dates, id: \.self) { date in
-                    WeekSubview(displayedWeek: date)
-                        .frame(width: geometry.size.width)
-                }
+                WeekHeaderView(displayedWeek: $currentDate)
             }
-            .offset(x: -geometry.size.width + dragOffset)
-            .gesture(
-                DragGesture()
-                    .onChanged { value in
-                        dragOffset = value.translation.width
+            .tint(.primary)
+            .padding()
+            .background(.lightgreen)
+            
+            
+            GeometryReader { geometry in
+                HStack(spacing: 0) {
+                    ForEach(dates, id: \.self) { date in
+                        WeekSubview(displayedWeek: date)
+                            .frame(width: geometry.size.width)
                     }
-                    .onEnded { value in
-                        let threshold: CGFloat = geometry.size.width / 3
-                        
-                        if value.translation.width < -threshold {
-                            // Swipe left → next week
-                            withAnimation(.easeInOut) {
-                                dragOffset = -geometry.size.width
-                            }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                currentDate = Calendar.current.date(byAdding: .weekOfYear, value: 1, to: currentDate)!
-                                dragOffset = 0
-                            }
-                        } else if value.translation.width > threshold {
-                            // Swipe right → previous week
-                            withAnimation(.easeInOut) {
-                                dragOffset = geometry.size.width
-                            }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                currentDate = Calendar.current.date(byAdding: .weekOfYear, value: -1, to: currentDate)!
-                                dragOffset = 0
-                            }
-                        } else {
-                            // Not far enough — snap back
-                            withAnimation(.easeOut) {
-                                dragOffset = 0
+                }
+                // apply visual offset when the user drags the view
+                .offset(x: -geometry.size.width + dragOffset)
+                // .gesture(DragGesture()) -> attaches a drag gesture recognizer to the view
+                .gesture(
+                    DragGesture()
+                        // Called when the drag gesture changes (aka the user is dragging) -> update dragOffset with the horizontal drag distance (value.translation.width) to move the content
+                        .onChanged { value in
+                            dragOffset = value.translation.width
+                        }
+                        // Called when the user finishes their drag -> depending on how far the user dragged the view, we go to the previous week, the next week or stay at the current week (threshold is at 1/3 of the screen)
+                        .onEnded { value in
+                            let threshold: CGFloat = geometry.size.width / 3
+                            
+                            if value.translation.width < -threshold {
+                                // When swiped left more than threshold → next week
+                                withAnimation(.easeInOut) {
+                                    dragOffset = -geometry.size.width
+                                }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                    currentDate = Calendar.current.date(byAdding: .weekOfYear, value: 1, to: currentDate)!
+                                    dragOffset = 0
+                                }
+                            } else if value.translation.width > threshold {
+                                // When swiped right more than threshold → previous week
+                                withAnimation(.easeInOut) {
+                                    dragOffset = geometry.size.width
+                                }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                    currentDate = Calendar.current.date(byAdding: .weekOfYear, value: -1, to: currentDate)!
+                                    dragOffset = 0
+                                }
+                            } else {
+                                // Not far enough — snap back
+                                withAnimation(.easeOut) {
+                                    dragOffset = 0
+                                }
                             }
                         }
-                    }
-            )
+                )
+            }
+            
         }
     }
 }
