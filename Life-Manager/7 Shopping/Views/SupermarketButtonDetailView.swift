@@ -8,8 +8,11 @@
 import SwiftUI
 struct SupermarketButtonDetailView: View {
     let supermarket: Supermarket
+    
+    
     // Binding, damit Änderungen hier die Hauptansicht beeinflussen.
     @Binding var selectedSupermarket: Supermarket?
+    
     
     var body: some View {
         Button {

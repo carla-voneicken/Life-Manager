@@ -35,7 +35,7 @@ struct TaskView: View {
     ]
     @State private var selectedMission: Mission?
     @State private var showPopup: Bool = false
-    
+/*
 //  Hintergrundfarbe bei Auswahl
     private func backgroundColor(for mission: Mission) -> Color {
         if let selected = selectedMission {
@@ -44,7 +44,7 @@ struct TaskView: View {
 // Wenn selectedMission nil ist, gib eine Standardfarbe zurück.
             return Color.blue.opacity(0.2)
         }
-    }
+    }*/
     
     var body: some View {
         NavigationStack {
