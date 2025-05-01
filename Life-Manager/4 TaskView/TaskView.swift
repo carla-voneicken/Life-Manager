@@ -51,8 +51,7 @@ struct TaskView: View {
             VStack {
                 HStack {
                     Spacer()
-                  //  TextField("Neue Mission", text: $newMissionTitle)
-                  //      .textFieldStyle(RoundedBorderTextFieldStyle())
+
                         .padding()
                     Image(systemName: "plus.circle.fill")
                         .resizable()
@@ -100,7 +99,7 @@ struct TaskView: View {
   //  }
     func addNewMission() {
         if !newMissionTitle.isEmpty {
-            let newMission = Mission(name: newMissionTitle, color: Color.random())
+            let newMission = Mission(name: newMissionTitle, color: Color.blue)
             missions.append(newMission)
             newMissionTitle = ""
         }
