@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-struct SupermarketButtonView: View {
+struct SupermarketButtonDetailView: View {
     let supermarket: Supermarket
     // Binding, damit Änderungen hier die Hauptansicht beeinflussen.
     @Binding var selectedSupermarket: Supermarket?
@@ -27,6 +27,7 @@ struct SupermarketButtonView: View {
         }
     }
 }
+
 struct SupermarketButtonView_Previews: PreviewProvider {
     static var previews: some View {
         // Erstelle eine Beispielmission mit einer Farbe
@@ -35,7 +36,7 @@ struct SupermarketButtonView_Previews: PreviewProvider {
         
         @State var selectedSupermarket: Supermarket? = nil
         
-        return SupermarketButtonView(supermarket: exampleSupermarket, selectedSupermarket: $selectedSupermarket)
+        return SupermarketButtonDetailView(supermarket: exampleSupermarket, selectedSupermarket: $selectedSupermarket)
             .previewLayout(.sizeThatFits)
     }
 }
