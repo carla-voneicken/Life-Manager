@@ -35,24 +35,23 @@ struct ShoppingListView: View {
     ]
     @State private var selectedSupermarket: Supermarket?
     @State private var showPopup: Bool = false
+   
     
-//  Hintergrundfarbe bei Auswahl
-    private func backgroundColor(for supermarket: Supermarket) -> Color {
+/* Hintergrundfarbe bei Auswahl
+    private func backgroundColorSupermarket(for supermarket: Supermarket) -> Color {
         if let selected = selectedSupermarket {
             return selected == supermarket ? Color.green.opacity(0.5) : Color.blue.opacity(0.2)
         } else {
 // Wenn selectedMission nil ist, gib eine Standardfarbe zurück.
             return Color.blue.opacity(0.2)
         }
-    }
-    
+    }*/
+
     var body: some View {
         NavigationStack {
             VStack {
                 HStack {
                     Spacer()
-                  //  TextField("Neue Mission", text: $newMissionTitle)
-                  //      .textFieldStyle(RoundedBorderTextFieldStyle())
                         .padding()
                     Image(systemName: "plus.circle.fill")
                         .resizable()
@@ -69,14 +68,13 @@ struct ShoppingListView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
                         ForEach(supermarket) { supermarket in
-                                                   SupermarketButtonView(supermarket: supermarket, selectedSupermarket: $selectedSupermarket)
+                        SupermarketButtonDetailView (supermarket: supermarket, selectedSupermarket: $selectedSupermarket)
                         }
                     }
                 }
                 if let selectedSupermarket = selectedSupermarket {
                     SupermarketDetailView(supermarket: selectedSupermarket)
                 } else {
-                    EmptyView()
                 }
                 Spacer()
             }
@@ -159,7 +157,7 @@ struct SupermarketPopup: View {
 struct SupermarketDetailView: View {
     @ObservedObject var supermarket: Supermarket
     @State private var newItemName = ""
-    @State private var struckThroughItem2 = Set<UUID>()
+    @State private var struckThroughItem3 = Set<UUID>()
     
     var body: some View {
         VStack {
@@ -184,12 +182,12 @@ struct SupermarketDetailView: View {
                 ForEach(supermarket.items) { item in
                     HStack {
                         Text(item.name)
-                            .strikethrough(struckThroughItem2.contains(item.id), color: .red)
+                            .strikethrough(struckThroughItem3.contains(item.id), color: .red)
                             .onTapGesture {
-                                if struckThroughItem2.contains(item.id) {
-                                    struckThroughItem2.remove(item.id)
+                                if struckThroughItem3.contains(item.id) {
+                                    struckThroughItem3.remove(item.id)
                                 } else {
-                                    struckThroughItem2.insert(item.id)
+                                    struckThroughItem3.insert(item.id)
                                 }
                             }
                     }
