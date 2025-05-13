@@ -15,7 +15,7 @@ struct SupermarketScrollView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
                 ForEach(supermarket) { supermarket in
-                    SupermarketButtonDetailView(supermarket: supermarket, selectedSupermarket: $selectedSupermarket)
+                    DummyButtonDetailView(supermarket: supermarket, selectedSupermarket: $selectedSupermarket)
                 }
             }
         }

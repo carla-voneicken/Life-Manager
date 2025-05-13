@@ -7,7 +7,7 @@
 
 import SwiftUI
 // ButtonStyle für die Buttons im Popup.
-
+/*
 struct PopupButtonStyle: ButtonStyle {
     var isCancel: Bool = false
     func makeBody(configuration: Configuration) -> some View {
@@ -20,3 +20,4 @@ struct PopupButtonStyle: ButtonStyle {
          //   .animation
     }
 }
+*/

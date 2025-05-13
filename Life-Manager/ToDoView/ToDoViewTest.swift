@@ -6,9 +6,12 @@
 //
 
 import SwiftUI
+import os.log
 
 
 struct ToDoViewTest: View {
+    
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.example.Life-Manager", category: "ToDoViewTest")
     
     var body: some View {
         VStack {
@@ -17,7 +20,11 @@ struct ToDoViewTest: View {
             HStack(){
     
                 Spacer()
-                Button(action: { }) {
+                Button(action: {
+                    
+                    logger.info( "Neuer ToDo Eintrag wurde gedrückt")
+                    
+                }) {
                     Image(systemName: "plus.circle.fill")
                         .foregroundColor(.green.opacity(0.3))
                         .font(.system(size: 30))
@@ -28,7 +35,12 @@ struct ToDoViewTest: View {
                         .cornerRadius(10)
                         .shadow(radius: 400)
                 }
-                Button(action: { }) {
+                Button(action: {
+                    
+                    logger.info("MüllButton wurde gedrückt")
+                }) {
+                    
+                    
                     Image(systemName: "trash.fill")
                         .foregroundColor(.red.opacity(0.3))
                         .font(.system(size: 30))
@@ -49,6 +61,9 @@ struct ToDoViewTest: View {
                     Text("Kochen")
                     Text("Sport")
                     Text("Kinder")
+                }
+                .onAppear {
+                    logger.info("ToDo Liste wurde angezeigt")
                 }
             }
            

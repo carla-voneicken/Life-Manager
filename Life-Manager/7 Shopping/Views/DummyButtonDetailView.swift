@@ -3,8 +3,6 @@
 //  Life-Manager
 //
 //  Created by Christiane Roth on 29.04.25.
-//
-
 import SwiftUI
 // 1. Protokoll definieren:
 protocol ButtonData: Identifiable {
@@ -12,9 +10,9 @@ protocol ButtonData: Identifiable {
     var name: String { get }
     var color: Color { get }
 }
-// Extension, damit Supermarket und Mission das Protokoll erfüllen
+// Extension, damit Supermarket das Protokoll erfüllt
 extension Supermarket: ButtonData {}
-extension Mission: ButtonData {}
+//extens
 
 import SwiftUI
 struct GenericButtonDetailView<T: ButtonData>: View { // Generic-Typ "T" mit der Bedingung das "T" ButtonData ist

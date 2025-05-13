@@ -16,7 +16,7 @@ class Supermarket: Identifiable, ObservableObject, Equatable {
     @Published var name: String
     @Published var items: [Item] = []
     @Published var color: Color
-    init(name: String, color: Color = .blue) {
+    init(name: String, color: Color = Color.randomColor()) {
         self.name = name
         self.color = color
     }

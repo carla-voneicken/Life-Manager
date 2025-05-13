@@ -5,7 +5,7 @@
 //  Created by Christiane Roth on 01.05.25.
 //
 
-import Foundation
+import SwiftUI
 
 struct Item: Identifiable {
     let id = UUID()
