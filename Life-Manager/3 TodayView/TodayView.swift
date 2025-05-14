@@ -113,7 +113,7 @@ struct TodayView: View {
                 if let selected = selectedCalendarItem,
                    let index = calendarItems.firstIndex(where: { $0.id == selected.id }) {
                     // CalendarDetailView takes a binding to a certain item (specified by the index) to make it editable
-                    CalendarDetailView(item: $calendarItems[index])
+                    CalendarItemDetailView(item: $calendarItems[index])
                         // Make the sheet oben to 40% of the screen
                         .presentationDetents([.fraction(0.4)])
                 }

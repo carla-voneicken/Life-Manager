@@ -3,18 +3,13 @@ import SwiftUI
 struct WeekSubview: View {
     
     let displayedWeek: Date
-    
     var daysOfWeek: [Date] {
         getDaysOfWeek(selectedWeek: displayedWeek)
     }
-    
     let hours = Array(0..<24)
-    
     private var columns: [GridItem] {
         Array(repeating: GridItem(.flexible(), spacing: 0), count: 8)
     }
-    
-    
     
     
     var body: some View {
@@ -34,8 +29,6 @@ struct WeekSubview: View {
                                 .frame(maxWidth: .infinity)
                         }
                     }
-                    
-                    
                     LazyVGrid(columns: columns, spacing: 0) {
                         // Empty top-left corner
                         Text("")
@@ -53,13 +46,12 @@ struct WeekSubview: View {
                                         .foregroundStyle(Calendar.current.isDateInToday(date) ? Color.primary : .clear)
                                         .padding(-3)
                                 }
-
                         }
                     }
                 }
                 .padding(.bottom)
-                .background(.lightgreen)
             
+            Divider()
 
             // MARK: Grid Body
             LazyVGrid(columns: columns, spacing: 0) {

@@ -20,9 +20,7 @@ struct WeeklyCalendarView: View {
                 WeekHeaderView(displayedWeek: $currentDate)
             }
             .tint(.primary)
-            .padding()
-            .background(.lightgreen)
-            
+            .padding()            
             
             GeometryReader { geometry in
                 HStack(spacing: 0) {
