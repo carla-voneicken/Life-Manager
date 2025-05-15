@@ -85,7 +85,7 @@ struct TodayView: View {
                 }
             }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle("Heute, \(date.dayFullMonthYear)")
+            .navigationTitle("Heute, \(date.dayFullMonth)")
             .toolbar {
                 // Link to profile/settings
                 NavigationLink(destination: ProfileView()) {

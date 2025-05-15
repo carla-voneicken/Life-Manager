@@ -30,63 +30,34 @@ func stringToDate(dateString: String, timeString: String) -> Date? {
 
 
 extension Date {
-    // 15:12
-    var shortTime: String {
+    func formatDate(format: String) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
+        formatter.locale = Locale(identifier: "de_DE")
+        formatter.dateFormat = format
         return formatter.string(from: self)
     }
+    
+    // 15:12
+    var shortTime: String { formatDate(format: "HH:mm") }
     
     // 30.04.2025
-    var dayShortMonthYear: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd.MM.yyyy"
-        return formatter.string(from: self)
-    }
+    var dayShortMonthYear: String { formatDate(format: "dd.MM.yyyy") }
     
     // April 2025
-    var fullMonthYear: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM yyyy"
-        return formatter.string(from: self)
-    }
+    var fullMonthYear: String { formatDate(format: "MMMM yyyy") }
     
     // 30.
-    var day: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d."
-        return formatter.string(from: self)
-    }
+    var day: String { formatDate(format: "d.") }
     
     // 30.4.
-    var dayMonth: String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "de_DE")
-        formatter.dateFormat = "d.M."
-        return formatter.string(from: self)
-    }
+    var dayMonth: String { formatDate(format: "d.M.") }
 
     // 30. April
-    var dayFullMonth: String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "de_DE")
-        formatter.dateFormat = "d. MMMM"
-        return formatter.string(from: self)
-    }
+    var dayFullMonth: String { formatDate(format: "d. MMMM") }
     
     // 30. April 2025
-    var dayFullMonthYear: String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "de_DE")
-        formatter.dateFormat = "d. MMMM yyyy"
-        return formatter.string(from: self)
-    }
+    var dayFullMonthYear: String { formatDate(format: "d. MMMM yyyy") }
     
     // Montag
-    var weekday: String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "de_DE")
-        formatter.dateFormat = "EEEE"
-        return formatter.string(from: self)
-    }
+    var weekday: String { formatDate(format: "EEEE") }
 }
