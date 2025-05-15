@@ -24,14 +24,15 @@ struct MonthlyCalendarView: View {
         
         VStack(spacing: 12) {
             // Display selected month with navigation arrows and the row of weekdays
-            MonthHeaderView(displayedMonth: $displayedMonth)
+            MonthNavigatorSubview(displayedMonth: $displayedMonth)
             
             GeometryReader { geometry in
-                ForEach(months, id: \.self) { month in
-                    MonthlyCalendarGridView(displayedMonth: $displayedMonth, selectedDate: $selectedDate)
-                        .frame(width: geometry.size.width)
+                HStack(spacing: 0) {
+                    ForEach(months, id: \.self) { month in
+                        MonthlyCalendarGridSubview(displayedMonth: $displayedMonth, selectedDate: $selectedDate)
+                            .frame(width: geometry.size.width)
+                    }
                 }
-                
                 // apply visual offset when the user drags the view
                 .offset(x: -geometry.size.width + dragOffset)
                 // .gesture(DragGesture()) -> attaches a drag gesture recognizer to the view
@@ -51,7 +52,7 @@ struct MonthlyCalendarView: View {
                                     dragOffset = -geometry.size.width
                                 }
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                    displayedMonth = Calendar.current.date(byAdding: .weekOfYear, value: 1, to: displayedMonth)!
+                                    displayedMonth = Calendar.current.date(byAdding: .month, value: 1, to: displayedMonth)!
                                     dragOffset = 0
                                 }
                             } else if value.translation.width > threshold {
@@ -60,7 +61,7 @@ struct MonthlyCalendarView: View {
                                     dragOffset = geometry.size.width
                                 }
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                    displayedMonth = Calendar.current.date(byAdding: .weekOfYear, value: -1, to: displayedMonth)!
+                                    displayedMonth = Calendar.current.date(byAdding: .month, value: -1, to: displayedMonth)!
                                     dragOffset = 0
                                 }
                             } else {

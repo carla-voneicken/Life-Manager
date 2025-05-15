@@ -2,30 +2,30 @@ import SwiftUI
 
 struct WeeklyCalendarView: View {
     
-    @State private var currentDate: Date = Date()
+    @State private var displayedWeek: Date = Date()
     
     // dragOffset: tracks the horizontal drag distance, to allow moving the content when the user swipes (0 is the neutral, undragged position)
     @State private var dragOffset: CGFloat = 0
     
     
     var body: some View {
-        let dates = [
-            Calendar.current.date(byAdding: .weekOfYear, value: -1, to: currentDate)!,
-            currentDate,
-            Calendar.current.date(byAdding: .weekOfYear, value: 1, to: currentDate)!
+        let weeks = [
+            Calendar.current.date(byAdding: .weekOfYear, value: -1, to: displayedWeek)!,
+            displayedWeek,
+            Calendar.current.date(byAdding: .weekOfYear, value: 1, to: displayedWeek)!
         ]
         
         VStack (spacing: 0){
             HStack(spacing: 0) {
-                WeekHeaderView(displayedWeek: $currentDate)
+                WeekNavigatorSubview(displayedWeek: $displayedWeek)
             }
             .tint(.primary)
             .padding()            
             
             GeometryReader { geometry in
                 HStack(spacing: 0) {
-                    ForEach(dates, id: \.self) { date in
-                        WeekSubview(displayedWeek: date)
+                    ForEach(weeks, id: \.self) { week in
+                        WeekGridSubview(displayedWeek: week)
                             .frame(width: geometry.size.width)
                     }
                 }
@@ -48,7 +48,7 @@ struct WeeklyCalendarView: View {
                                     dragOffset = -geometry.size.width
                                 }
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                    currentDate = Calendar.current.date(byAdding: .weekOfYear, value: 1, to: currentDate)!
+                                    displayedWeek = Calendar.current.date(byAdding: .weekOfYear, value: 1, to: displayedWeek)!
                                     dragOffset = 0
                                 }
                             } else if value.translation.width > threshold {
@@ -57,7 +57,7 @@ struct WeeklyCalendarView: View {
                                     dragOffset = geometry.size.width
                                 }
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                    currentDate = Calendar.current.date(byAdding: .weekOfYear, value: -1, to: currentDate)!
+                                    displayedWeek = Calendar.current.date(byAdding: .weekOfYear, value: -1, to: displayedWeek)!
                                     dragOffset = 0
                                 }
                             } else {
@@ -69,7 +69,6 @@ struct WeeklyCalendarView: View {
                         }
                 )
             }
-            
         }
     }
 }

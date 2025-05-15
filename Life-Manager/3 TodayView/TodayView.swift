@@ -9,14 +9,8 @@ import SwiftUI
 import Foundation
 
 struct TodayView: View {
-    // Date and Formatter for displaying the current date
+
     let date: Date = Date()
-    let calendar = Calendar.current
-    var formattedDate: String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        return formatter.string(from: date)
-    }
     
     // Arrays of calendar and task items
     @State private var calendarItems = CalendarItem.samples
@@ -91,7 +85,7 @@ struct TodayView: View {
                 }
             }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle("Heute, \(formattedDate)")
+            .navigationTitle("Heute, \(date.dayFullMonthYear)")
             .toolbar {
                 // Link to profile/settings
                 NavigationLink(destination: ProfileView()) {

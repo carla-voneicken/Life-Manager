@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MonthlyCalendarGridView: View {
+struct MonthlyCalendarGridSubview: View {
     @State var todaysDate: Date = Date()
     @Binding var displayedMonth: Date
     @Binding var selectedDate: Date
@@ -33,7 +33,7 @@ struct MonthlyCalendarGridView: View {
             }
             
             ForEach(days, id: \.self) { date in
-                CalendarDayCell(
+                CalendarDayCellSubview(
                     date: date,
                     calendar: calendar,
                     displayedMonth: displayedMonth,

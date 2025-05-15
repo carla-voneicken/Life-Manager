@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MonthHeaderView: View {
+struct MonthNavigatorSubview: View {
     @Binding var displayedMonth: Date
     
     // Function to change the month (if the calculation fails, fall back to the current value)

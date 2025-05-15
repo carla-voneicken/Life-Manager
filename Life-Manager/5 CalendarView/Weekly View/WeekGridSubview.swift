@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct WeekSubview: View {
+struct WeekGridSubview: View {
     
     let displayedWeek: Date
     var daysOfWeek: [Date] {
@@ -107,5 +107,5 @@ struct WeekSubview: View {
 }
 
 #Preview {
-    WeekSubview(displayedWeek: Date())
+    WeekGridSubview(displayedWeek: Date())
 }

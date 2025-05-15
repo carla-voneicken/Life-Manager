@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct WeekHeaderView: View {
+struct WeekNavigatorSubview: View {
     @Binding var displayedWeek: Date
     
     var daysOfWeek: [Date] {
