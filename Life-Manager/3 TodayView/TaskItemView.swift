@@ -40,8 +40,7 @@ struct TaskItemView: View {
 
 
 #Preview {
-    @Previewable @State var item: TaskItem = TaskItem(
-        title: "Einkaufen",
+    @Previewable @State var item: TaskItem = TaskItem( title: "Einkaufen",
         description: "Pfand nicht vergessen",
         isCompleted: false
     )

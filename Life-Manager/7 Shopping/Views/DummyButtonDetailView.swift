@@ -24,17 +24,19 @@ struct GenericButtonDetailView<T: ButtonData>: View { // Generic-Typ "T" mit der
             if selectedData?.id == data.id { // Überprüfe, ob der Button bereits ausgewählt ist
                 selectedData = nil // Auswahl zurücksetzen
             } else {
-                selectedData = data // Button auswählen
+                selectedData = data
+                    // Button auswählen
             }
         } label: {
             Text(data.name)
                 .font(.title3)
                 .fontWeight(.semibold)
-                .frame(width: 150, height: 150)
+                .frame(width: 100, height: 100)
                 .background(data.color)
                 .foregroundColor(.white)
                 .cornerRadius(10)
                 .shadow(radius: 5)
+                .scaleEffect(selectedData?.id == data.id ? 1.2 : 1)
                 .padding(10)
         }
     }
@@ -57,11 +59,12 @@ struct DummyButtonDetailView: View {
             Text(supermarket.name)
                 .font(.title3)
                 .fontWeight(.semibold)
-                .frame(width: 150, height: 150)
+                .frame(width: 100, height: 100)
                 .background(supermarket.color)
                 .foregroundColor(.white)
                 .cornerRadius(10)
                 .shadow(radius: 5)
+                .scaleEffect(selectedSupermarket == supermarket ? 1.2 : 1)
                 .padding(10)
         }
     }

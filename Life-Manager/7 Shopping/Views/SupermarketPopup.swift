@@ -32,7 +32,7 @@ struct GenericPopupView: View {
             }
         }
         .frame(width: 300, height: 200)
-        .background(Color.pink.opacity(0.3))
+        .background(Color.popup)
         .cornerRadius(10)
         .padding()
         .transition(.scale)
@@ -43,8 +43,10 @@ struct PopupButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .padding()
-            .background(isCancel ? Color.red : Color.blue)
+            .background(isCancel ? Color.red.opacity(0.7) : Color.blue.opacity(0.7))
             .foregroundColor(.white)
             .cornerRadius(8)
     }
 }
+
+
