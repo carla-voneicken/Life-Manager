@@ -11,6 +11,7 @@ struct CalendarLayoutPickerButton: View {
     @Binding var isExpanded: Bool
     @Binding var selectedLayout: CalendarLayout
     
+    // button icon depending on the currently selected calendar layout
     var icon: String {
         switch selectedLayout {
             case .month: return "CalendarIcon30"
