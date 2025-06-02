@@ -11,7 +11,12 @@ import SwiftUI
 struct DropdownOption: Identifiable {
     let id = UUID()
     var title: String
-    var color: Color = .primary
     var icon: String
-    var action: () -> Void
+    var layout: CalendarLayout
 }
+
+let dropdownOptions = [
+    DropdownOption(title: "Monatsansicht", icon: "CalendarIcon30", layout: .month),
+    DropdownOption(title: "Wochenansicht", icon: "CalendarIcon7", layout: .week),
+    DropdownOption(title: "Tagesansicht", icon: "CalendarIcon1", layout: .day)
+]

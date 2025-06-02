@@ -18,7 +18,7 @@ struct ContentView: View {
                .tabItem {
                    Label("Aufgaben", systemImage: "checklist")
                }
-           MonthlyCalendarView()
+           CalendarView()
                .tabItem {
                    Label("Kalender", systemImage: "calendar")
                }
