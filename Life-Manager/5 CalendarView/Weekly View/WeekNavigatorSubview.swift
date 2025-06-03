@@ -52,3 +52,7 @@ struct WeekNavigatorSubview: View {
     }
 }
 
+#Preview {
+    WeekNavigatorSubview(displayedWeek: .constant(Date()))
+}
+

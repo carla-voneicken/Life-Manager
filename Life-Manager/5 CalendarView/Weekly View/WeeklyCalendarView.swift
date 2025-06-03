@@ -26,7 +26,7 @@ struct WeeklyCalendarView: View {
                 HStack(spacing: 0) {
                     ForEach(weeks, id: \.self) { week in
                         WeekGridSubview(displayedWeek: week)
-                            .frame(width: geometry.size.width)
+                            .frame(width: geometry.size.width, height: geometry.size.height)
                     }
                 }
                 // apply visual offset when the user drags the view
@@ -69,6 +69,7 @@ struct WeeklyCalendarView: View {
                         }
                 )
             }
+            .frame(maxHeight: .infinity)
         }
     }
 }
