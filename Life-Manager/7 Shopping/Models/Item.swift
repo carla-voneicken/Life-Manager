@@ -5,11 +5,12 @@ class Item: Identifiable, ObservableObject {
     @Published var name: String
     @Published var isCompleted: Bool = false
     @Published var description: String? // Hinzugefügt: Optionales Beschreibungsfeld
-    init(name: String, isCompleted: Bool, description: String? = nil) { // Beschreibungsfeld initialisieren
+    init(name: String, isCompleted: Bool = false, description: String? = nil) { // Beschreibungsfeld initialisieren
         self.name = name
         self.isCompleted = isCompleted
         self.description = description
     }
+    
     static var sampleItems: [Item] = [
         Item(
             name: "Erdbeeren",

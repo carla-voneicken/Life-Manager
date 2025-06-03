@@ -16,11 +16,13 @@ class Supermarket: Identifiable, ObservableObject, Equatable {
     @Published var name: String
     @Published var items: [Item] = []
     @Published var color: Color
-    init(name: String, color: Color = Color.randomColor()) {
+    init(name: String, color: Color = Color.randomColor(), items: [Item] = []) {
         self.name = name
         self.color = color
+        self.items = items
     }
     static func == (lhs: Supermarket, rhs: Supermarket) -> Bool {
         return lhs.id == rhs.id
     }
 }
+

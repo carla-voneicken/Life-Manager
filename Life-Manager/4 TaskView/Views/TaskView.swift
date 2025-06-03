@@ -29,6 +29,8 @@ struct TaskView: View {
                 }
                 Spacer()
             }
+
+
             .overlay(
                 Group {
                     if showPopup {
