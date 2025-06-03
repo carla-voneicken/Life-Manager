@@ -1,3 +1,11 @@
+//
+//  SupermarketDetailView 2.swift
+//  Life-Manager
+//
+//  Created by Christiane Roth on 03.06.25.
+//
+
+/*
 import SwiftUI
 struct SupermarketDetailView: View {
     @ObservedObject var supermarket: Supermarket
@@ -15,7 +23,7 @@ struct SupermarketDetailView: View {
                     .textFieldStyle(.roundedBorder)
                 Button {
                     if !newItemName.isEmpty {
-                        supermarket.items.append(Item(name: newItemName))
+                        supermarket.items.append(Item(name: newItemName, isCompleted: false))
                         newItemName = ""
                     }
                 } label: {
@@ -27,18 +35,12 @@ struct SupermarketDetailView: View {
             List {
                 ForEach(supermarket.items) { item in
                     HStack {
-                        Image(systemName: struckThroughItem.contains(item.id) ? "checkmark.square" : "square")
+                        Image(systemName: item.isCompleted ? "checkmark.square.fill" : "square")
                             .onTapGesture {
-                                if struckThroughItem.contains(item.id) {
-                                    struckThroughItem.remove(item.id)
-                                } else {
-                                    struckThroughItem.insert(item.id)
-                                }
+                                item.isCompleted.toggle()
                             }
                         Text(item.name)
-                            .font(.headline)
-                            .foregroundColor(struckThroughItem.contains(item.id) ? .gray : .black) // Korrigierte Zeile
-                            .strikethrough(struckThroughItem.contains(item.id), color: .red)
+                            .strikethrough(item.isCompleted, color: .red)
                     }
                 }
                 .onDelete { indexSet in
@@ -52,3 +54,4 @@ struct SupermarketDetailView: View {
         )
     }
 }
+*/
