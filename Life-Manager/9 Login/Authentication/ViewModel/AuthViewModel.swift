@@ -4,7 +4,8 @@ class AuthViewModel: ObservableObject {
     @Published var userSession: User? // Geändert zu User?
     @Published var currentUser: User?
     @Published var userExample1: [User] = [] //Nutzen wir nicht!
-    @Published var newUserGreeting: String = "Willkommen, neuer Benutzer!"
+    @Published var showRegistration: Bool = false
+    @Published var loginError: String? = nil
 
     @Published var dummyUsers: [User] = [  // @Published hinzufügen
         User(id: "C", fullname: "Christiane Roth", email:"CR@gmail.com", password: "1234"),
@@ -40,10 +41,17 @@ class AuthViewModel: ObservableObject {
                 // Login erfolgreich
                 currentUser = user // Setze den aktuellen Benutzer
                 userSession = user // Setze die User Session
+                loginError = nil
+                showRegistration = false
                 return true
+            } else {
+                loginError = ""
+                return false
             }
         }
-        // Login fehlgeschlagen
+        showRegistration = true
+        loginError = ""
         return false
+    
     }
 }

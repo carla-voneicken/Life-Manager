@@ -14,9 +14,17 @@ struct ContentView2: View {
             if ViewModel.userSession != nil {
                 ContentView()
             } else {
-                VStack {
-                    Text(ViewModel.newUserGreeting)
-                    LoginView()
+                if ViewModel.showRegistration {
+                   RegistrationView()
+                
+                } else {
+                    VStack {
+                        LoginView()
+                        if let error = ViewModel.loginError {
+                            Text(error)
+                                .foregroundColor(.red)
+                        }
+                    }
                 }
             }
         }
