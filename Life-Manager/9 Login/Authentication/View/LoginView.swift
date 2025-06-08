@@ -10,6 +10,10 @@ import SwiftUI
 struct LoginView: View {
     @State private var email = ""
     @State private var password = ""
+    @EnvironmentObject var viewModel: AuthViewModel
+    @State private var loginFailed: Bool = false
+    @State private var dummyUsers: [User] = []
+    @State private var user: User?
     
     var body: some View {
        NavigationStack {
@@ -39,7 +43,14 @@ struct LoginView: View {
                
                //sign in button
                Button {
-                   print("Log user in..")
+                   if viewModel.attemptLogin(email: email, password: password) {
+                       print("Dummy user logged in successful")
+                       
+                       Task {
+                           try await viewModel.signIn(withEmail: email, password: password)
+                           print("Log user in..")
+                       }
+                   } else { loginFailed = true }
                } label: {
                    HStack {
                        Text("SIGN IN")
@@ -68,12 +79,20 @@ struct LoginView: View {
                    .font(.system(size: 14))
                }
            }
+           .alert(isPresented:$loginFailed) {
+               Alert(
+                title: Text("Login Failed"), message: Text("Invalid email or password"), dismissButton: .default(Text("OK"))
+               )
+           }
         }
         
     }
 }
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        let authViewModel = AuthViewModel()
+        return LoginView()
+            .environmentObject(authViewModel)
+       
     }
 }
