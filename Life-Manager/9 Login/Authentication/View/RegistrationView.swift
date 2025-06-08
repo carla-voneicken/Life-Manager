@@ -17,11 +17,7 @@ struct RegistrationView: View {
     var body: some View {
         VStack {
             // image
-            Image(systemName: "person.2.circle.fill")
-                .resizable()
-                .scaledToFit( )
-                .frame(width: 100, height: 120)
-                .padding(.vertical, 32)
+            LoginImageView()
             
             VStack(spacing: 24) {
                 InputView(text: $email,
@@ -30,8 +26,8 @@ struct RegistrationView: View {
                 .autocapitalization(.none)
                 
                 InputView(text: $fullname,
-                          title: "Email Adress",
-                          placeholder: "name@example.com")
+                          title: "Full name",
+                          placeholder: "first Name, last Name")
                 
                 InputView(text: $password,
                           title: "Password",
@@ -50,7 +46,7 @@ struct RegistrationView: View {
                 Task {
                     try? await viewModel.createUser(withEmail: email, password: password, fullname: fullname)
                 }
-               // print("Sign user up...")
+                print("Sign user up...")
             } label: {
                 HStack {
                     Text("SIGN UP")

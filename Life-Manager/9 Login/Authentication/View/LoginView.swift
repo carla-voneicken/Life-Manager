@@ -14,16 +14,13 @@ struct LoginView: View {
     @State private var loginFailed: Bool = false
     @State private var dummyUsers: [User] = []
     @State private var user: User?
+
     
     var body: some View {
        NavigationStack {
            VStack {
                // image
-               Image(systemName: "person.2.circle.fill")
-                   .resizable()
-                   .scaledToFit( )
-                   .frame(width: 100, height: 120)
-                   .padding(.vertical, 32)
+               LoginImageView()
                
                // form fields
                VStack(spacing: 24) {
