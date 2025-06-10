@@ -1,39 +1,70 @@
 import SwiftUI
-
 class AuthViewModel: ObservableObject {
-    @Published var userSession: User? // Geändert zu User?
+    @Published var userSession: User?
     @Published var currentUser: User?
-    @Published var userExample1: [User] = [] //Nutzen wir nicht!
     @Published var showRegistration: Bool = false
     @Published var loginError: String? = nil
-
-    @Published var dummyUsers: [User] = [  // @Published hinzufügen
+    @Published var dummyUsers: [User] = [
         User(id: "C", fullname: "Christiane Roth", email:"CR@gmail.com", password: "1234"),
         User(id: "alice123", fullname: "Alice Wonderland", email: "alice@example.com", password: "securePassword1"),
         User(id: "bob456", fullname: "Bob The Builder", email: "bob.builder@example.com", password: "passwordBob"),
-        User(id: "charlie789", fullname: "Charlie Chaplin", email: "charlie.c@example.com", password: "charlieSecret"),
-        User(id: "diana007", fullname: "Diana Prince", email: "diana.prince@example.com", password: "wonderWomanPW"),
-        User(id: "ethan_hunt", fullname: "Ethan Hunt", email: "ethan.hunt@example.com", password: "impossibleMission"),
-        User(id: "fiona.g", fullname: "Fiona Goode", email: "fiona.goode@example.com", password: "supremeWitch"),
-        User(id: "gordonR", fullname: "Gordon Ramsay", email: "gordon.ramsay@example.com", password: "hellsKitchenPW"),
-        User(id: "hermione.g", fullname: "Hermione Granger", email: "hermione.granger@example.com", password: "magicAlways"),
         User(id: "indiana_j", fullname: "Indiana Jones", email: "indiana.jones@example.com", password: "ancientRelics"),
         User(id: "jamesBond007", fullname: "James Bond", email: "james.bond@example.com", password: "007Secret")
     ]
-    init() {
-    }
+    init() {}
     func signIn(withEmail email: String, password: String) async throws {
         print("Sign in...")
-        // Hier würde die echte Firebase-Anmeldung stehen, aber wir verwenden die Dummy-Authentifizierung.
     }
-    func createUser(withEmail email: String, password: String, fullname: String)  {
+    func createUser(withEmail email: String, password: String, fullname: String) async throws {
+        #if DEBUG
+        print("AuthViewModel.createUser: Starte createUser mit E-Mail: \(email), Fullname: \(fullname)")
+        #endif
+        do {
+            try validateEmail(email)
+            try validatePassword(password)
+            try validateFullname(fullname)
+            #if DEBUG
+            print("AuthViewModel.createUser: Validierungen erfolgreich bestanden")
+            #endif
+            if dummyUsers.contains(where: { $0.email == email }) {
+                print("Email already exists.")
+                throw AuthError.emailAlreadyExists
+            }
+            // **Nur hier** wird der neue Benutzer erstellt, wenn alle Validierungen erfolgreich sind
+            let newUser = User(id: UUID().uuidString, fullname: fullname, email: email, password: password)
+            dummyUsers.append(newUser)
+            print("User \(newUser.fullname) generated successfully.")
+        } catch {
+            // Hier Fehler behandeln, z.B. loggen oder einen anderen Fehler werfen
+            print("Validierungsfehler in createUser: \(error)")
+            throw error // **WICHTIG: Den Fehler weiterwerfen!**
+        }
+        
     }
-    func signOut() {
+    private func validateEmail(_ email: String) throws {
+        guard !email.isEmpty else {
+            throw AuthError.missingEmail
+        }
+        if !email.contains("@") {
+            throw AuthError.invalidEmail
+        }
     }
-    func deleteAccount() {
+    private func validatePassword(_ password: String) throws {
+        guard !password.isEmpty else {
+            throw AuthError.missingPassword
+        }
+        guard password.count >= 8 else {
+            throw AuthError.shortPassword
+        }
     }
-    func fetchUser() async {
+    private func validateFullname(_ fullname: String) throws {
+        guard !fullname.isEmpty else {
+            throw AuthError.missingFullname
+        }
     }
+    func signOut() {}
+    func deleteAccount() {}
+    func fetchUser() async {}
     //Dummy attemptLogin funktion, email und passwort als parameter!!
     func attemptLogin(email: String, password: String) -> Bool {
         for user in dummyUsers {
@@ -44,14 +75,19 @@ class AuthViewModel: ObservableObject {
                 loginError = nil
                 showRegistration = false
                 return true
-            } else {
-                loginError = ""
-                return false
             }
         }
         showRegistration = true
         loginError = ""
         return false
-    
+    }
+    enum AuthError: Error {
+        case missingEmail
+        case invalidEmail
+        case missingPassword
+        case shortPassword
+        case missingFullname
+        case emailAlreadyExists
+        case weakPassword
     }
 }

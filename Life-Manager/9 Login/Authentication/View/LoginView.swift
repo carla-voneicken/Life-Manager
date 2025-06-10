@@ -19,10 +19,10 @@ struct LoginView: View {
     var body: some View {
        NavigationStack {
            VStack {
-               // image
+    
                LoginImageView()
                
-               // form fields
+
                VStack(spacing: 24) {
                    InputView(text: $email,
                              title: "Email Adress",
@@ -33,37 +33,20 @@ struct LoginView: View {
                              title: "Password",
                              placeholder: "Enter your Password",
                              isSecureField: true)
+                   .autocapitalization(.none)
                    
                }
                .padding(.horizontal)
                .padding(.top, 12)
                
-               //sign in button
-               Button {
-                   if viewModel.attemptLogin(email: email, password: password) {
-                       print("Dummy user logged in successful")
-                       
-                       Task {
-                           try await viewModel.signIn(withEmail: email, password: password)
-                           print("Log user in..")
-                       }
-                   } else { loginFailed = true }
-               } label: {
-                   HStack {
-                       Text("SIGN IN")
-                           .fontWeight(.semibold)
-                       Image(systemName: "arrow.right")
-                       
-                   }
-                   .foregroundColor(.white)
-                   .frame(width: UIScreen.main.bounds.width - 32, height: 48)
-               }
-               .background(Color(.systemBlue))
-               .cornerRadius(10)
-               .padding(.top, 24)
                
+               
+               SigninButtonView(email: $email, password: $password, viewModel: _viewModel, loginFailed: $loginFailed)
+               }
+           
+               .padding(.top, 24)
                Spacer()
-               // sign in button
+        
                NavigationLink {
                    RegistrationView()
                        .navigationBarBackButtonHidden(true)
@@ -84,7 +67,7 @@ struct LoginView: View {
         }
         
     }
-}
+
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
         let authViewModel = AuthViewModel()
