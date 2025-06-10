@@ -13,14 +13,10 @@ struct RegistrationView: View {
     @State private var password = ""
     @State private var confirmPasswort = ""
     @Environment(\.dismiss) var dismiss
-    @StateObject var viewModel = AuthViewModel()
-    @State private var errorMessage: String?
-    @State private var showAlert: Bool = false
-    @State private var isLoading: Bool = false
-    
+    @EnvironmentObject var viewModel: AuthViewModel
     var body: some View {
         VStack {
-            
+            // image
             LoginImageView()
             
             VStack(spacing: 24) {
@@ -46,51 +42,11 @@ struct RegistrationView: View {
             .padding(.horizontal)
             .padding(.top, 24)
             
-            Button() {
-                isLoading = true
-                #if DEBUG
-                print("RegistrationView: Registrierung gestartet mit E-Mail: \(email), Fullname: \(fullname)")
-                #endif
+            Button {
                 Task {
-                    do {
-                        try await viewModel.createUser(withEmail: email, password: password, fullname: fullname)
-                        #if DEBUG
-                        print("RegistrationView: Registrierung erfolgreich!")
-                        #endif
-                    } catch AuthViewModel.AuthError.missingEmail {
-                        errorMessage = "E-Mail fehlt"
-                        #if DEBUG
-                        print("RegistrationView: E-Mail fehlt")
-                        #endif
-                        showAlert = true
-                    } catch AuthViewModel.AuthError.invalidEmail {
-                        errorMessage = "Ungültige E-Mail"
-                        #if DEBUG
-                        print("RegistrationView: Ungültige E-Mail")
-                        #endif
-                        showAlert = true
-                    } catch AuthViewModel.AuthError.weakPassword {
-                        errorMessage = "Schwaches Passwort"
-                        #if DEBUG
-                        print("RegistrationView: Schwaches Passwort")
-                        #endif
-                        showAlert = true
-                    } catch AuthViewModel.AuthError.emailAlreadyExists {
-                        errorMessage = "E-Mail bereits vorhanden"
-                        #if DEBUG
-                        print("RegistrationView: E-Mail bereits vorhanden")
-                        #endif
-                        showAlert = true
-                    } catch { // Generischer catch-Block für *alle* anderen Fehler
-                        errorMessage = "Ein unbekannter Fehler ist aufgetreten: \(error)" // Bessere Fehlermeldung
-                        #if DEBUG
-                        print("RegistrationView: Unerwarteter Fehler bei der Registrierung: \(error)")
-                        #endif
-                        showAlert = true
-                    }
-                    isLoading = false
+                    try? await viewModel.createUser(withEmail: email, password: password, fullname: fullname)
                 }
-            
+                print("Sign user up...")
             } label: {
                 HStack {
                     Text("SIGN UP")
@@ -104,11 +60,6 @@ struct RegistrationView: View {
             .background(Color(.systemBlue))
             .cornerRadius(10)
             .padding(.top, 24)
-            .disabled(isLoading) // Button deaktivieren während des Ladens
-                      if isLoading {
-                          ProgressView() // Ladeindikator
-                              .padding(.top, 8)
-                      }
             
             Spacer()
             
