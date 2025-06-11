@@ -9,14 +9,8 @@ import SwiftUI
 import Foundation
 
 struct TodayView: View {
-    // Date and Formatter for displaying the current date
+
     let date: Date = Date()
-    let calendar = Calendar.current
-    var formattedDate: String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        return formatter.string(from: date)
-    }
     
     // Arrays of calendar and task items
     @State private var calendarItems = CalendarItem.samples
@@ -91,7 +85,7 @@ struct TodayView: View {
                 }
             }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle("Heute, \(formattedDate)")
+            .navigationTitle("Heute, \(date.dayFullMonth)")
             .toolbar {
                 // Link to profile/settings
                 NavigationLink(destination: ProfileView()) {
@@ -113,7 +107,7 @@ struct TodayView: View {
                 if let selected = selectedCalendarItem,
                    let index = calendarItems.firstIndex(where: { $0.id == selected.id }) {
                     // CalendarDetailView takes a binding to a certain item (specified by the index) to make it editable
-                    CalendarDetailView(item: $calendarItems[index])
+                    CalendarItemDetailView(item: $calendarItems[index])
                         // Make the sheet oben to 40% of the screen
                         .presentationDetents([.fraction(0.4)])
                 }

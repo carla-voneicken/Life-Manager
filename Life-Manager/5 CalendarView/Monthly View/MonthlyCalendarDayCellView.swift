@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CalendarDayCell: View {
+struct CalendarDayCellSubview: View {
     let date: Date
     let calendar: Calendar
     let displayedMonth: Date

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CalendarDetailView: View {
+struct CalendarItemDetailView: View {
     @Binding var item: CalendarItem
     
     var body: some View {
@@ -78,6 +78,6 @@ struct CalendarDetailView: View {
             participants: [FamilyMember.familyMembers[0], FamilyMember.familyMembers[2]]
         )
     ) { item in
-        CalendarDetailView(item: item)
+        CalendarItemDetailView(item: item)
     }
 }

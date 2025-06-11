@@ -79,8 +79,8 @@ struct CalendarItem: Identifiable {
             ),
             CalendarItem(
                 title: "Mama-Treffen",
-                startDate: stringToDate(dateString: "2025-04-29", timeString: "20:00")!,
-                endDate: stringToDate(dateString: "2025-04-29", timeString: "23:00")!,
+                startDate: stringToDate(dateString: "2025-05-15", timeString: "20:00")!,
+                endDate: stringToDate(dateString: "2025-05-15", timeString: "23:00")!,
                 location: "Sportverein",
                 participants: [FamilyMember.familyMembers[0]]
             ),
