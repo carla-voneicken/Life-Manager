@@ -10,9 +10,32 @@
 		C31F34182D9ADF65004A50D5 /* Life-Manager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Life-Manager.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		C327DABE2DFDCADF004FF87A /* Exceptions for "Life-Manager" folder in "Life-Manager" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Business/ViewModels/README.md,
+				Common/Utils/Extensions/README.md,
+				Data/README.md,
+				Presentation/CalendarScreen/README.md,
+				Presentation/FamilyScreen/README.md,
+				Presentation/LoginScreen/README.md,
+				Presentation/MainScreen/README.md,
+				Presentation/ProfileScreen/README.md,
+				Presentation/ShoppingScreen/README.md,
+				Presentation/TaskScreen/README.md,
+				Presentation/TodayScreen/README.md,
+			);
+			target = C31F34172D9ADF65004A50D5 /* Life-Manager */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C31F341A2D9ADF65004A50D5 /* Life-Manager */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				C327DABE2DFDCADF004FF87A /* Exceptions for "Life-Manager" folder in "Life-Manager" target */,
+			);
 			path = "Life-Manager";
 			sourceTree = "<group>";
 		};
