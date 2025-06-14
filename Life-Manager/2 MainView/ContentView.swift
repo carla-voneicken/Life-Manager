@@ -14,7 +14,7 @@ struct ContentView: View {
                .tabItem {
                    Label("Heute", systemImage: "house.fill")
                }
-           ToDoView()
+           TaskView()
                .tabItem {
                    Label("Aufgaben", systemImage: "checklist")
                }

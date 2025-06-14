@@ -1,14 +1,13 @@
 //
-//  TaskItemView.swift
+//  SupermarketItemDetailView.swift
 //  Life-Manager
 //
-//  Created by Carla von Eicken on 07.04.25.
-//
-
+//  Created by Christiane Roth on 25.05.25.
+/*
 import SwiftUI
 
-struct TaskItemView: View {
-    @Binding var item: TaskItem
+struct SupermarketItemDetailView: View {
+    @Binding var item: Item
     
     var body: some View {
         HStack {
@@ -40,9 +39,10 @@ struct TaskItemView: View {
 
 
 #Preview {
-    @Previewable @State var item: TaskItem = TaskItem( title: "Einkaufen",
-        description: "Pfand nicht vergessen",
+    @Previewable @State var item: Item = Item(
+        title: "Erdbeeren",
         isCompleted: false
     )
-    TaskItemView(item: $item)
+    SupermarketItemDetailView(item: $item)
 }
+*/

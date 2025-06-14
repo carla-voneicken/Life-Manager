@@ -6,8 +6,9 @@
 //
 
 import SwiftUI
-
+/*
 struct StartTab: View {
+    @Environment(\.appColors) var appColors
     @State private var router = Router()
     var body: some View {
         TabView(selection: $router.selectedTab) {
@@ -34,3 +35,4 @@ class Router {
     var selectedTab: TabViewEnum = .todayView
 }
 
+*/
