@@ -65,22 +65,22 @@ struct CalendarItem: Identifiable {
             ),
             CalendarItem(
                 title: "Musical",
-                startDate: stringToDate(dateString: "2025-04-27", timeString: "20:00")!,
-                endDate: stringToDate(dateString: "2025-04-27", timeString: "22:00")!,
+                startDate: Date(),
+                endDate: Date(),
                 location: "Stadttheater",
                 participants: [FamilyMember.familyMembers[0], FamilyMember.familyMembers[2]]
             ),
             CalendarItem(
                 title: "Geigenvorspiel",
-                startDate: stringToDate(dateString: "2025-04-28", timeString: "16:00")!,
-                endDate: stringToDate(dateString: "2025-04-28", timeString: "17:00")!,
+                startDate: Date(),
+                endDate: Date(),
                 location: "Schule",
                 participants: [FamilyMember.familyMembers[0], FamilyMember.familyMembers[1], FamilyMember.familyMembers[2], FamilyMember.familyMembers[3]]
             ),
             CalendarItem(
                 title: "Mama-Treffen",
-                startDate: stringToDate(dateString: "2025-05-15", timeString: "20:00")!,
-                endDate: stringToDate(dateString: "2025-05-15", timeString: "23:00")!,
+                startDate: Date(),
+                endDate: Date(),
                 location: "Sportverein",
                 participants: [FamilyMember.familyMembers[0]]
             ),
