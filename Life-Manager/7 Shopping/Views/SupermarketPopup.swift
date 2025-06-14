@@ -32,7 +32,7 @@ struct GenericPopupView: View {
             }
         }
         .frame(width: 300, height: 200)
-        .background(Color.popup)
+//        .background(Color.popup)
         .cornerRadius(10)
         .padding()
         .transition(.scale)

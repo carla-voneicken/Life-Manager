@@ -2,10 +2,14 @@
 import SwiftUI
 struct LoginImageView: View {
     var body: some View {
-        Image(systemName: "person.2.circle.fill")
+        Image("AppIconImage")
             .resizable()
             .scaledToFit()
             .frame(width: 100, height: 120)
             .padding(.vertical, 32)
     }
+}
+
+#Preview {
+    LoginImageView()
 }

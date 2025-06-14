@@ -43,10 +43,10 @@ struct LoginView: View {
                    if viewModel.attemptLogin(email: email, password: password) {
                        print("Dummy user logged in successful")
                        
-                       Task {
-                           try await viewModel.signIn(withEmail: email, password: password)
-                           print("Log user in..")
-                       }
+//                       Task {
+//                           try await viewModel.signIn(withEmail: email, password: password)
+//                           print("Log user in..")
+//                       }
                    } else { loginFailed = true }
                } label: {
                    HStack {
