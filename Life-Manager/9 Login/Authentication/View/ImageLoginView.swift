@@ -5,7 +5,8 @@ struct LoginImageView: View {
         Image("AppIconImage")
             .resizable()
             .scaledToFit()
-            .frame(width: 100, height: 120)
+            .frame(width: 200, height: 150)
+          
             .padding(.vertical, 32)
     }
 }

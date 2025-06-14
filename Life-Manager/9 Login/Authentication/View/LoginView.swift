@@ -17,72 +17,94 @@ struct LoginView: View {
 
     
     var body: some View {
+  
        NavigationStack {
-           VStack {
-               // image
-               LoginImageView()
-               
-               // form fields
-               VStack(spacing: 24) {
-                   InputView(text: $email,
-                             title: "Email Adress",
-                             placeholder: "name@example.com")
-                   .autocapitalization(.none)
-                   
-                   InputView(text: $password,
-                             title: "Password",
-                             placeholder: "Enter your Password",
-                             isSecureField: true)
+           ZStack {
+               GeometryReader { geometry in
+                   Image("AppIconImage")
+                       
+                       .resizable()
+                       .scaledToFill()
+                       .frame(width: geometry.size .width, height: geometry.size.height)
+                       .clipped()
+                       .opacity(0.3)
+                       .ignoresSafeArea()
                    
                }
-               .padding(.horizontal)
-               .padding(.top, 12)
-               
-               //sign in button
-               Button {
-                   if viewModel.attemptLogin(email: email, password: password) {
-                       print("Dummy user logged in successful")
+               VStack(spacing: 48) {
+                   
+                   
+                   // image
+           //        LoginImageView()
+                   
+                   // form fields
+                   VStack(spacing: 24) {
+                    
+                       InputView(text: $email,
+                                 title: "Email Adress",
+                                 placeholder: "name@example.com")
+                       .autocapitalization(.none)
                        
-//                       Task {
-//                           try await viewModel.signIn(withEmail: email, password: password)
-//                           print("Log user in..")
-//                       }
-                   } else { loginFailed = true }
-               } label: {
-                   HStack {
-                       Text("SIGN IN")
-                           .fontWeight(.semibold)
-                       Image(systemName: "arrow.right")
+                       InputView(text: $password,
+                                 title: "Password",
+                                 placeholder: "Enter your Password",
+                                 isSecureField: true)
                        
                    }
-                   .foregroundColor(.white)
-                   .frame(width: UIScreen.main.bounds.width - 32, height: 48)
-               }
-               .background(Color(.systemBlue))
-               .cornerRadius(10)
-               .padding(.top, 24)
-               
-               Spacer()
-               // sign in button
-               NavigationLink {
-                   RegistrationView()
-                       .navigationBarBackButtonHidden(true)
-               } label: {
-                   HStack(spacing: 3) {
-                       Text("Don't have an account?")
-                       Text("Sign Up")
-                           .fontWeight(.bold)
+                   .padding(.horizontal)
+                   .padding(.top, 12)
+                   
+                   //sign in button
+                   Button {
+                       if viewModel.attemptLogin(email: email, password: password) {
+                           print("Dummy user logged in successful")
+                           
+                           //                       Task {
+                           //                           try await viewModel.signIn(withEmail: email, password: password)
+                           //                           print("Log user in..")
+                           //                       }
+                       } else { loginFailed = true }
+                   } label: {
+                       HStack {
+                           Text("SIGN IN")
+                               .fontWeight(.semibold)
+                           Image(systemName: "arrow.right")
+                           
+                       }
+                       .foregroundColor(.white)
+                       .frame(width: UIScreen.main.bounds.width - 32, height: 48)
                    }
-                   .font(.system(size: 14))
+                   .background(Color(.systemBlue))
+                   .cornerRadius(10)
+                   .padding(.top, 24)
+                   
+                   Spacer()
+                   // sign in button
+                   NavigationLink {
+                       RegistrationView()
+                           .navigationBarBackButtonHidden(true)
+                   } label: {
+                       HStack(spacing: 3) {
+                           Text("Don't have an account?")
+                           Text("Sign Up")
+                               .fontWeight(.bold)
+                       }
+                       .font(.system(size: 14))
+                   }
+                   
                }
-           }
-           .alert(isPresented:$loginFailed) {
-               Alert(
-                title: Text("Login Failed"), message: Text("Invalid email or password"), dismissButton: .default(Text("OK"))
+               .padding(.top, 250)
+               .alert(isPresented:$loginFailed) {
+                   Alert(
+                    title: Text("Login Failed"), message: Text("Invalid email or password"), dismissButton: .default(Text("OK"))
+                   )
+               }
+               .background(
+                Color.white.opacity(0.3)
+                    .ignoresSafeArea()
                )
            }
         }
-        
     }
 }
 struct LoginView_Previews: PreviewProvider {
