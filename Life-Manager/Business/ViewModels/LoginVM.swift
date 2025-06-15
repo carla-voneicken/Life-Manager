@@ -11,6 +11,7 @@ import SwiftUI
 class LoginViewModel: ObservableObject {
     @Published var email = ""
     @Published var password = ""
+    @Published var fullName = ""
     @Published var loginFailed = false
     private let authService: AuthenticationService
     init(authService: AuthenticationService) {
